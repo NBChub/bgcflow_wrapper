@@ -1,31 +1,10 @@
-===============
-bgcflow_wrapper
-===============
-
-
-.. image:: https://img.shields.io/pypi/v/bgcflow_wrapper.svg
-        :target: https://pypi.python.org/pypi/bgcflow_wrapper
-
-.. image:: https://img.shields.io/travis/matinnuhamunada/bgcflow_wrapper.svg
-        :target: https://travis-ci.com/matinnuhamunada/bgcflow_wrapper
-
-.. image:: https://readthedocs.org/projects/bgcflow-wrapper/badge/?version=latest
-        :target: https://bgcflow-wrapper.readthedocs.io/en/latest/?version=latest
-        :alt: Documentation Status
-
-
-
+# bgcflow_wrapper
 
 A snakemake and snakedeploy wrapper for BGCFlow.
 
-
-* Free software: MIT license
-* Documentation: https://bgcflow-wrapper.readthedocs.io.
-
-
-Usage
+## Usage
 --------
-Clone this repository::
+Clone this repository
 
     git clone git@github.com:matinnuhamunada/bgcflow_wrapper.git
 
@@ -35,9 +14,12 @@ Use conda/mamba to create environment and install the package::
     mamba env create -f env.yaml
 
 
-Features
+## Features
 --------
-Current features::
+```bash
+
+$ bgcflow_wrapper
+
     Usage: bgcflow_wrapper [OPTIONS] COMMAND [ARGS]...
 
       A snakemake wrapper and utility tools for BGCFlow
@@ -51,6 +33,7 @@ Current features::
       deploy  [EXPERIMENTAL] Deploy BGCFlow locally using snakedeploy.
       init    [COMING SOON] Initiate an empty BGCFlow PEP config file.
       run     [COMING SOON] A snakemake wrapper to run BGCFlow.
+```
 
 Credits
 -------
