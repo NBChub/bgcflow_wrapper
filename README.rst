@@ -23,12 +23,13 @@ A snakemake and snakedeploy wrapper for BGCFlow.
 * Documentation: https://bgcflow-wrapper.readthedocs.io.
 
 
-Usage:
-Clone this repository.::
+Usage
+--------
+Clone this repository::
 
     git clone git@github.com:matinnuhamunada/bgcflow_wrapper.git
 
-Use conda/mamba to create environment and install the package.::
+Use conda/mamba to create environment and install the package::
 
     cd bgcflow_wrapper
     mamba env create -f env.yaml
@@ -36,8 +37,7 @@ Use conda/mamba to create environment and install the package.::
 
 Features
 --------
-
-::
+Current features::
     Usage: bgcflow_wrapper [OPTIONS] COMMAND [ARGS]...
 
       A snakemake wrapper and utility tools for BGCFlow
