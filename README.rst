@@ -24,15 +24,12 @@ A snakemake and snakedeploy wrapper for BGCFlow.
 
 
 Usage:
-Clone this repository.
-.. highlight:: bash
+Clone this repository.::
 
-::
     git clone git@github.com:matinnuhamunada/bgcflow_wrapper.git
 
-Use conda/mamba to create environment and install the package.
+Use conda/mamba to create environment and install the package.::
 
-::
     cd bgcflow_wrapper
     mamba env create -f env.yaml
 
@@ -54,8 +51,6 @@ Features
       deploy  [EXPERIMENTAL] Deploy BGCFlow locally using snakedeploy.
       init    [COMING SOON] Initiate an empty BGCFlow PEP config file.
       run     [COMING SOON] A snakemake wrapper to run BGCFlow.
-
-.. highlight:: none
 
 Credits
 -------
