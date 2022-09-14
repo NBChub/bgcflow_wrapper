@@ -1,4 +1,5 @@
 # bgcflow_wrapper
+[![Snakemake](https://img.shields.io/badge/snakemake-≥7.14.0-brightgreen.svg)](https://snakemake.bitbucket.io)
 
 A snakemake and snakedeploy wrapper for BGCFlow.
 
@@ -23,6 +24,7 @@ $ bgcflow_wrapper
     Usage: bgcflow_wrapper [OPTIONS] COMMAND [ARGS]...
 
       A snakemake wrapper and utility tools for BGCFlow
+      (https://github.com/NBChub/bgcflow)
 
     Options:
       --version   Show the version and exit.
@@ -32,13 +34,11 @@ $ bgcflow_wrapper
       clone   Use git to clone BGCFlow to local directory.
       deploy  [EXPERIMENTAL] Deploy BGCFlow locally using snakedeploy.
       init    [COMING SOON] Initiate an empty BGCFlow PEP config file.
-      run     [COMING SOON] A snakemake wrapper to run BGCFlow.
+      rules   Get description of available rules from BGCFlow.
+      run     A snakemake CLI wrapper to run BGCFlow.
 ```
 
 Credits
 -------
 
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
-
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+This package was created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [`audreyr/cookiecutter-pypackage`](https://github.com/audreyr/cookiecutter-pypackage) project template.
