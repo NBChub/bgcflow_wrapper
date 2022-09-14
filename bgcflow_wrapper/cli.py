@@ -2,41 +2,16 @@
 import sys
 import click
 import bgcflow_wrapper
-from snakedeploy.deploy import deploy as dplyr
-from git import Repo
-from pathlib import Path
+from bgcflow_wrapper.bgcflow_wrapper import cloner, deployer, snakemake_wrapper, get_all_rules
+
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
-
-def greeter(**kwargs):
-    output = '{0}, {1}!'.format(kwargs['greeting'],
-                                kwargs['name'])
-    if kwargs['caps']:
-        output = output.upper()
-    print(output)
-
-def deployer(**kwargs):
-    dplyr('https://github.com/NBChub/bgcflow.git',
-           branch=kwargs['branch'],
-           name="bgcflow",
-           dest_path=Path(kwargs['destination']),
-           tag="v0.3.3-alpha"
-         )
-    return
-
-def cloner(**kwargs):
-    destination_dir = Path(kwargs['destination'])
-    click.echo(f"Cloning BGCFlow to {destination_dir}...")
-    destination_dir.mkdir(parents=True, exist_ok=True)
-    Repo.clone_from("https://github.com/NBChub/bgcflow.git", Path(kwargs['destination']))
-    return
-
 
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.version_option(version=bgcflow_wrapper.__version__)
 def main():
     """
-    A snakemake wrapper and utility tools for BGCFlow
+    A snakemake wrapper and utility tools for BGCFlow (https://github.com/NBChub/bgcflow)
     """
     pass
 
@@ -76,13 +51,30 @@ def init(**kwargs):
     click.echo("Work in progress...")
 
 @main.command()
-@click.option('--bgcflow_dir', default='.', help='Location of BGCFlow directory')
+@click.option('--bgcflow_dir', default='.', help='Location of BGCFlow directory. (DEFAULT: Current working directory.)')
+@click.option('--snakefile', default='workflow/Snakefile', help='Location of the Snakefile relative to BGCFlow directory. (DEFAULT: workflow/Snakefile)')
+@click.option('--wms-monitor', default='http://127.0.0.1:5000', help='Panoptes address. (DEFAULT: http://127.0.0.1:5000)')
+@click.option('-c', '--cores', default=32, help='Use at most N CPU cores/jobs in parallel. (DEFAULT: 32)')
+@click.option('-n', '--dryrun', is_flag=True, help='Test run.')
+@click.option('-t', '--touch', is_flag=True, help='Touch output files (mark them up to date without really changing them).')
 def run(**kwargs):
     """
-    [COMING SOON] A snakemake wrapper to run BGCFlow.
+    A snakemake CLI wrapper to run BGCFlow. Automatically run panoptes.
 
     """
-    click.echo("Work in progress...")
+    snakemake_wrapper(**kwargs)
+
+
+@main.command()
+@click.option('--bgcflow_dir', default='.', help='Location of BGCFlow directory. (DEFAULT: Current working directory)')
+def rules(**kwargs):
+    """
+    [Get description of available rules from BGCFlow.
+
+    """
+    click.echo("Printing all BGCFlow rules:")
+    get_all_rules(**kwargs)
+
 
 if __name__ == "__main__":
     sys.exit(main())  # pragma: no cover
