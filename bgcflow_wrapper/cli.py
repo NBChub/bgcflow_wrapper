@@ -85,7 +85,7 @@ def rules(**kwargs):
 @click.option('--samples_csv', help='Path to samples file. Use with `--project` option.')
 def init(**kwargs):
     """
-    Initiate BGCFlow config files from template. Use --project to create a new BGCFlow project.
+    Create projects or initiate BGCFlow config files from template. Use --project to create a new BGCFlow project.
 
     Usage:
     bgcflow_wrapper init --> check current directory for existing config dir. If not found, generate from template.
@@ -95,7 +95,7 @@ def init(**kwargs):
     try:
         projects_util(**kwargs)
     except FileNotFoundError as e:
-        click.echo("ERROR: Cannot find BGCFlow directory. Use `--bgcflow_dir` to locate BGCFlow directory or `bgcflow_wrapper clone` to get a local copy.")
+        click.echo("ERROR: Cannot find BGCFlow directory.\nPoint to the right directory using `--bgcflow_dir <destination>` or clone BGCFlow using `bgcflow_wrapper clone <destination>`")
 
 if __name__ == "__main__":
     sys.exit(main())  # pragma: no cover

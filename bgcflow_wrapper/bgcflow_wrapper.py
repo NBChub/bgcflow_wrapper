@@ -72,6 +72,6 @@ def get_all_rules(**kwargs):
             for item in data.keys():
                 print(f" - {item}")
     else:
-        print("ERROR: Cannot find BGCFlow directory.\n       Point to the right directory using `--bgcflow_dir <destination>` or clone BGCFlow using `bgcflow_wrapper clone <destination>`.")
+        print("ERROR: Cannot find BGCFlow directory.\nPoint to the right directory using `--bgcflow_dir <destination>` or clone BGCFlow using `bgcflow_wrapper clone <destination>`.")
 
     return
