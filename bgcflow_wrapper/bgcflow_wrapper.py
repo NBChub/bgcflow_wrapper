@@ -86,14 +86,26 @@ def cloner(**kwargs):
 def get_all_rules(**kwargs):
 
     path = Path(kwargs['bgcflow_dir'])
-    rule_file = path / "workflow/rules/rules.json"
+    rule_file = path / "workflow/rules/rules_main.json"
 
     if rule_file.is_file():
         with open(rule_file, "r") as file:
             data = json.load(file)
 
+        if type(kwargs['describe']) is str:
+            rule_name = kwargs['describe']
+            print(f"{rule_name} - {data[rule_name]['description']}")
+
+        elif type(kwargs['cite']) is str:
+            rule_name = kwargs['cite']
+            print(f"Citations for {rule_name}:")
+            [print("-", c) for c in data[rule_name]['references']]
+
+        else:
+            print("Printing available rules:")
             for item in data.keys():
                 print(f" - {item}")
+
     else:
         print("ERROR: Cannot find BGCFlow directory.\nPoint to the right directory using `--bgcflow_dir <destination>` or clone BGCFlow using `bgcflow_wrapper clone <destination>`.")
 

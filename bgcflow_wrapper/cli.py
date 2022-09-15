@@ -57,12 +57,13 @@ def run(**kwargs):
 
 @main.command()
 @click.option('--bgcflow_dir', default='.', help='Location of BGCFlow directory. (DEFAULT: Current working directory)')
+@click.option('--describe', help='Get description of a given rule.')
+@click.option('--cite', help='Get citation of a given rule.')
 def rules(**kwargs):
     """
     Get description of available rules from BGCFlow.
 
     """
-    click.echo("Printing all BGCFlow rules:")
     get_all_rules(**kwargs)
 
 @main.command()
