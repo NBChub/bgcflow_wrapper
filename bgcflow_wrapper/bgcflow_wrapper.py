@@ -91,15 +91,18 @@ def get_all_rules(**kwargs):
     if rule_file.is_file():
         with open(rule_file, "r") as file:
             data = json.load(file)
+        try:
+            if type(kwargs['describe']) is str:
+                rule_name = kwargs['describe']
+                print(f"{rule_name} - {data[rule_name]['description']}")
 
-        if type(kwargs['describe']) is str:
-            rule_name = kwargs['describe']
-            print(f"{rule_name} - {data[rule_name]['description']}")
-
-        elif type(kwargs['cite']) is str:
-            rule_name = kwargs['cite']
-            print(f"Citations for {rule_name}:")
-            [print("-", c) for c in data[rule_name]['references']]
+            elif type(kwargs['cite']) is str:
+                rule_name = kwargs['cite']
+                print(f"Citations for {rule_name}:")
+                [print("-", c) for c in data[rule_name]['references']]
+        except KeyError:
+            rule_name = [r for r in [kwargs['describe'], kwargs['cite']] if type(r) is str]
+            print(f"ERROR: Cannot find rule {rule_name} in dictionary. Find available rules with `bgcflow_wrapper rules`.")
 
         else:
             print("Printing available rules:")

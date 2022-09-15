@@ -58,7 +58,18 @@ bgcflow_wrapper init --bgcflow_dir MY_BGCFLOW_PATH
 # do a dry-run
 bgcflow_wrapper run -n --bgcflow_dir MY_BGCFLOW_PATH
 ```
-
+```bash
+# find out available rules
+bgcflow_wrapper rules --bgcflow_dir MY_BGCFLOW_PATH
+```
+```bash
+# get description of a rule
+bgcflow_wrapper rules --describe query-bigslice --bgcflow_dir MY_BGCFLOW_PATH/
+```
+```bash
+# get citation of a rule
+bgcflow_wrapper rules --cite query-bigslice --bgcflow_dir MY_BGCFLOW_PATH/
+```
 ## Generating BGCFlow projects from Jupyter Notebooks
 --------
 You can also generate new projects from Jupyter notebooks:
