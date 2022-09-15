@@ -13,6 +13,7 @@ Use conda/mamba to create environment and install the package:
 
     cd bgcflow_wrapper
     mamba env create -f env.yaml
+    cd ..
 
 >**Developer Note**: BGCFlow wrapper are still in development phase. We will make it available to install using `pip` when BGCFlow wrapper is released.
 
@@ -39,7 +40,21 @@ Commands:
   run     A snakemake CLI wrapper to run BGCFlow.
 ```
 
+## Tutorial
+--------
+```bash
+# get a clone of BGCFlow in your local machine
+bgcflow_wrapper clone MY_BGCFLOW_PATH #change PATH accordingly
+
+# initiate an example config and projects from template
+bgcflow_wrapper init --bgcflow_dir MY_BGCFLOW_PATH
+
+# do a dry-run
+bgcflow_wrapper run -n --bgcflow_dir MY_BGCFLOW_PATH
+```
+
 ## Generating BGCFlow projects from Jupyter Notebooks
+--------
 You can also generate new projects from Jupyter notebooks:
 ```python
 from bgcflow_wrapper.projects_util import generate_project

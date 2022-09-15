@@ -55,10 +55,9 @@ def snakemake_wrapper(**kwargs):
             time.sleep(1)
 
     # run snakemake
-    snakemake_run = subprocess.call(f"snakemake --use-conda --keep-going --rerun-incomplete \
-                                    --rerun-triggers mtime -c {kwargs['cores']} --snakefile \
-                                    {snakefile_path} {dryrun} {touch} --wms-monitor \
-                                    {kwargs['wms_monitor']}", shell=True)
+    snakemake_command = f"cd {kwargs['bgcflow_dir']} && snakemake --use-conda --keep-going --rerun-incomplete --rerun-triggers mtime -c {kwargs['cores']} {dryrun} {touch} --wms-monitor {kwargs['wms_monitor']}"
+    click.echo(snakemake_command)
+    snakemake_run = subprocess.call(snakemake_command , shell=True)
     try:
         if not type(p) == str:
             click.echo(f"Killing panoptes: PID {p.pid}")
