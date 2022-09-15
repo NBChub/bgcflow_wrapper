@@ -1,4 +1,4 @@
-from pathlib import Path
+from pathlib import Path, PosixPath
 import peppy
 import yaml, json
 import shutil
@@ -35,12 +35,16 @@ def bgcflow_init(bgcflow_dir, global_config):
     return
 
 def generate_project(bgcflow_dir, project_name, pep_version="2.1.0", use_project_rules=False,
-                    samples_csv=False, prokka_db=False, gtdb_tax=False):
+                    samples_csv=False, prokka_db=False, gtdb_tax=False, description=False):
     """
     Generate a PEP project in BGCFlow config file:
     Params:
         - samples_csv
     """
+    if bgcflow_dir is PosixPath:
+        pass
+    else:
+        bgcflow_dir = Path(bgcflow_dir)
     global_config = bgcflow_dir / "config/config.yaml"
     template_dict = {'name': project_name,
                      'pep_version': pep_version,
@@ -60,7 +64,7 @@ def generate_project(bgcflow_dir, project_name, pep_version="2.1.0", use_project
     
     if type(samples_csv) == pd.core.frame.DataFrame:
         print("Generating samples file from Pandas DataFrame")
-        assert df_samples.index.name == 'genome_id'
+        assert samples_csv.index.name == 'genome_id'
         assert (samples_csv.columns == ['source', 'organism', 'genus', 'species', 'strain', 'closest_placement_reference']).all
         samples_csv.to_csv(project_dir / "samples.csv")
     elif type(samples_csv) == str:
@@ -82,6 +86,10 @@ def generate_project(bgcflow_dir, project_name, pep_version="2.1.0", use_project
         assert gtdb_tax.is_file()
         shutil.copy(gtdb_tax, project_dir / "gtdbtk.bac120.summary.tsv")
         template_dict['gtdb-tax'] = "gtdbtk.bac120.summary.tsv"
+
+    if type(description) == str:
+        print(f"Writing project description...")
+        template_dict['description'] = description
     
     print(f"Project config file generated in: {project_dir}")
     with open(project_dir / "project_config.yaml", "w") as file:
