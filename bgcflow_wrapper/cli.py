@@ -3,6 +3,7 @@ import sys
 import click
 import bgcflow_wrapper
 from bgcflow_wrapper.bgcflow_wrapper import cloner, deployer, snakemake_wrapper, get_all_rules
+from bgcflow_wrapper.projects_util import projects_util
 
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -69,12 +70,32 @@ def run(**kwargs):
 @click.option('--bgcflow_dir', default='.', help='Location of BGCFlow directory. (DEFAULT: Current working directory)')
 def rules(**kwargs):
     """
-    [Get description of available rules from BGCFlow.
+    Get description of available rules from BGCFlow.
 
     """
     click.echo("Printing all BGCFlow rules:")
     get_all_rules(**kwargs)
 
+@main.command()
+@click.option('--bgcflow_dir', default='.', help='Location of BGCFlow directory. (DEFAULT: Current working directory)')
+@click.option('--project', help='Initiate a new BGCFlow project. Insert project name: `bgcflow_wrapper init --project <TEXT>`')
+@click.option('--use_own_rules', is_flag=True, help='Generate rule selection template in PEP file instead of using Global rules. Use with `--project` option.')
+@click.option('--prokka_db', help='Path to custom reference file. Use with `--project` option.')
+@click.option('--gtdb_tax', help='Path to custom taxonomy file. Use with `--project` option.')
+@click.option('--samples_csv', help='Path to samples file. Use with `--project` option.')
+def init(**kwargs):
+    """
+    Initiate BGCFlow config files from template. Use --project to create a new BGCFlow project.
+
+    Usage:
+    bgcflow_wrapper init --> check current directory for existing config dir. If not found, generate from template.
+    bgcflow_wrapper init --project <TEXT> --> generate a new BGCFlow project in the config directory.
+
+    """
+    try:
+        projects_util(**kwargs)
+    except FileNotFoundError as e:
+        click.echo("ERROR: Cannot find BGCFlow directory. Use `--bgcflow_dir` to locate BGCFlow directory or `bgcflow_wrapper clone` to get a local copy.")
 
 if __name__ == "__main__":
     sys.exit(main())  # pragma: no cover
