@@ -43,12 +43,18 @@ Commands:
 ## Tutorial
 --------
 ```bash
+# activate the environment
+conda activate bgcflow_wrapper
+```
+```bash
 # get a clone of BGCFlow in your local machine
 bgcflow_wrapper clone MY_BGCFLOW_PATH #change PATH accordingly
-
+```
+```bash
 # initiate an example config and projects from template
 bgcflow_wrapper init --bgcflow_dir MY_BGCFLOW_PATH
-
+```
+```bash
 # do a dry-run
 bgcflow_wrapper run -n --bgcflow_dir MY_BGCFLOW_PATH
 ```
