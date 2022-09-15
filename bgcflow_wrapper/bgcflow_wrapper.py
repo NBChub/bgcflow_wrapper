@@ -79,7 +79,8 @@ def cloner(**kwargs):
     destination_dir = Path(kwargs['destination'])
     click.echo(f"Cloning BGCFlow to {destination_dir}...")
     destination_dir.mkdir(parents=True, exist_ok=True)
-    Repo.clone_from("https://github.com/NBChub/bgcflow.git", Path(kwargs['destination']))
+    Repo.clone_from("https://github.com/NBChub/bgcflow.git", Path(kwargs['destination']),
+                    branch=kwargs['branch'])
     return
 
 def get_all_rules(**kwargs):

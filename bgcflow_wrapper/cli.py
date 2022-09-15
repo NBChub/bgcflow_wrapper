@@ -29,27 +29,16 @@ def deploy(**kwargs):
 
 @main.command()
 @click.argument('destination')
+@click.option('--branch', default='dev-snakemake-wrapper', help='BGCFlow branch. (DEFAULT: `dev-snakemake-wrapper`)')
 def clone(**kwargs):
     """
     Use git to clone BGCFlow to local directory.
 
     DESTINATION: path to clone BGCFlow
+
+    BRANCH: BGCFlow branch to clone. Currently using development branch: `dev-snakemake-wrapper`
     """
     cloner(**kwargs)
-
-@main.command()
-@click.argument('destination')
-@click.argument('name')
-def init(**kwargs):
-    """
-    [COMING SOON] Initiate an empty BGCFlow PEP config file.
-
-    DESTINATION: path BGCFlow directory\n
-    NAME: project name
-    """
-    config_dir = Path(kwargs['destination']) / 'config'
-    click.echo(f"Creating PEP file: {kwargs['name']}/project_config.yaml in {config_dir.resolve()}")
-    click.echo("Work in progress...")
 
 @main.command()
 @click.option('--bgcflow_dir', default='.', help='Location of BGCFlow directory. (DEFAULT: Current working directory.)')
@@ -96,6 +85,7 @@ def init(**kwargs):
         projects_util(**kwargs)
     except FileNotFoundError as e:
         click.echo("ERROR: Cannot find BGCFlow directory.\nPoint to the right directory using `--bgcflow_dir <destination>` or clone BGCFlow using `bgcflow_wrapper clone <destination>`")
+        print(e)
 
 if __name__ == "__main__":
     sys.exit(main())  # pragma: no cover

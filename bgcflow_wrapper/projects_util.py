@@ -9,13 +9,14 @@ def generate_global_config(bgcflow_dir, global_config):
     Copy config.yaml from template to config directory
     """
     print(f"Generating config file from template at: {global_config}")
-    template_config = bgcflow_dir / "config/examples/_config_example.yaml"
+    template_config = bgcflow_dir / ".examples/_config_example.yaml"
+    assert template_config.is_file(), "Cannot find template file. Are you using BGCFlow version >= 0.4.1?"
     shutil.copy(template_config, global_config)
     return
 
 def bgcflow_init(bgcflow_dir, global_config):
     """
-    Initiate a 
+    Initiate a config from template
     """
     # check if global config available
     if global_config.is_file():
@@ -114,7 +115,9 @@ def generate_project(bgcflow_dir, project_name, pep_version="2.1.0", use_project
 def projects_util(**kwargs):
     pep_version = "2.1.0"
     bgcflow_dir = Path(kwargs["bgcflow_dir"]).resolve()
-    global_config = bgcflow_dir / "config/config.yaml"
+    config_dir = bgcflow_dir / 'config'
+    config_dir.mkdir(parents=True, exist_ok=True)
+    global_config = config_dir / "config.yaml"
     
     if type(kwargs['project']) == str:
         project_name = kwargs['project']
