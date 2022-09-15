@@ -7,10 +7,13 @@ import click
 from snakedeploy.deploy import deploy as dplyr
 from git import Repo
 import json
+import time
 
 def snakemake_wrapper(**kwargs):
     bgcflow_dir = Path(kwargs['bgcflow_dir'])
     snakefile_path = bgcflow_dir / kwargs['snakefile']
+
+    p = "Empty process catcher"
 
     dryrun = ""
     touch = ""
@@ -34,14 +37,34 @@ def snakemake_wrapper(**kwargs):
         click.echo(f"Panoptes job id: {p.pid}")
 
     # run snakemake
+    click.echo('Connecting to Panoptes...')
+    ctr = 1
+    for tries in range(10):
+        try:
+            item = requests.get(f"{kwargs['wms_monitor']}/api/service-info")
+            status = item.json()['status']
+            if status == 'running':
+                click.echo(f"Panoptes status: {status}")
+                break
+        except requests.exceptions.RequestException as e:  # This is the correct syntax
+            click.echo(f"Retrying to connect: {ctr}x")
+            ctr = ctr + 1
+            time.sleep(1)
+            pass
+        else:
+            time.sleep(1)
+
+    # run snakemake
     snakemake_run = subprocess.call(f"snakemake --use-conda --keep-going --rerun-incomplete \
                                     --rerun-triggers mtime -c {kwargs['cores']} --snakefile \
                                     {snakefile_path} {dryrun} {touch} --wms-monitor \
                                     {kwargs['wms_monitor']}", shell=True)
     try:
-        p.kill()
+        if not type(p) == str:
+            click.echo(f"Killing panoptes: PID {p.pid}")
+            p.kill()
     except UnboundLocalError as e:
-        print(e)
+        click.echo(e)
     return
 
 def deployer(**kwargs):
