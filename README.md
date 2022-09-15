@@ -39,6 +39,25 @@ Commands:
   run     A snakemake CLI wrapper to run BGCFlow.
 ```
 
+## Generating BGCFlow projects from Jupyter Notebooks
+You can also generate new projects from Jupyter notebooks:
+```python
+from bgcflow_wrapper.projects_util import generate_project
+import pandas as pd
+
+df_samples = pd.read_csv('samples.csv', index_col=0)
+description = "Project generated from notebook"
+
+generate_project("BGCFLOW_PATH",
+                "MY_PROJECT",
+                use_project_rules=True,
+                samples_csv=df_samples,
+                prokka_db="prokka-db.csv",
+                gtdb_tax="gtdbtk.bac120.summary.tsv",
+                description=description
+                )
+```
+
 ## Credits
 -------
 
