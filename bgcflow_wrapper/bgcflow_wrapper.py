@@ -94,20 +94,22 @@ def get_all_rules(**kwargs):
         try:
             if type(kwargs['describe']) is str:
                 rule_name = kwargs['describe']
-                print(f"{rule_name} - {data[rule_name]['description']}")
+                print(f"Description for {rule_name}:")
+                print(f" - {data[rule_name]['description']}")
 
-            elif type(kwargs['cite']) is str:
+            if type(kwargs['cite']) is str:
                 rule_name = kwargs['cite']
                 print(f"Citations for {rule_name}:")
                 [print("-", c) for c in data[rule_name]['references']]
+
+            else:
+                print("Printing available rules:")
+                for item in data.keys():
+                    print(f" - {item}")
+
         except KeyError:
             rule_name = [r for r in [kwargs['describe'], kwargs['cite']] if type(r) is str]
             print(f"ERROR: Cannot find rule {rule_name} in dictionary. Find available rules with `bgcflow_wrapper rules`.")
-
-        else:
-            print("Printing available rules:")
-            for item in data.keys():
-                print(f" - {item}")
 
     else:
         print("ERROR: Cannot find BGCFlow directory.\nPoint to the right directory using `--bgcflow_dir <destination>` or clone BGCFlow using `bgcflow_wrapper clone <destination>`.")
