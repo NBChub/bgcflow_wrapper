@@ -3,8 +3,9 @@ import sys
 import click
 import bgcflow_wrapper
 from bgcflow_wrapper.bgcflow_wrapper import cloner, deployer, snakemake_wrapper, get_all_rules
-from bgcflow_wrapper.projects_util import projects_util
-
+from bgcflow_wrapper.projects_util import projects_util, copy_final_output
+from pathlib import Path
+import subprocess
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
@@ -75,7 +76,7 @@ def rules(**kwargs):
 @click.option('--samples_csv', help='Path to samples file. Use with `--project` option.')
 def init(**kwargs):
     """
-    Create projects or initiate BGCFlow config files from template. Use --project to create a new BGCFlow project.
+    Create projects or initiate BGCFlow config. Use --project to create a new BGCFlow project.
 
     Usage:
     bgcflow_wrapper init --> check current directory for existing config dir. If not found, generate from template.
@@ -87,6 +88,30 @@ def init(**kwargs):
     except FileNotFoundError as e:
         click.echo("ERROR: Cannot find BGCFlow directory.\nPoint to the right directory using `--bgcflow_dir <destination>` or clone BGCFlow using `bgcflow_wrapper clone <destination>`")
         print(e)
+
+@main.command()
+@click.argument('project')
+@click.argument('destination')
+@click.option('--bgcflow_dir', default='.', help='Location of BGCFlow directory. (DEFAULT: Current working directory)')
+def get_result(**kwargs):
+    """
+    Use rsync to copy a given project results from BGCFlow.
+
+    PROJECT: project name
+    DESTINATION: path to copy results.
+    """
+    copy_final_output(**kwargs)
+
+@main.command()
+@click.option('--port', default=9999, help='Port to use. (DEFAULT: 9999)')
+@click.option('--bgcflow_dir', default='.', help='Location of BGCFlow directory. (DEFAULT: Current working directory)')
+def serve(**kwargs):
+    """
+    Run a simple http server of the output directory.
+    """
+    output_dir = Path(kwargs['bgcflow_dir']) / 'data'
+    assert output_dir.is_dir(), "ERROR: Cannot find BGCFlow directory. Use --bgcflow_dir to set the right location."
+    subprocess.call(['python', '-m', 'http.server', '--directory', str(output_dir), str(kwargs['port'])])
 
 if __name__ == "__main__":
     sys.exit(main())  # pragma: no cover

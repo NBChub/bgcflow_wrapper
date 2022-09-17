@@ -3,6 +3,7 @@ import peppy
 import yaml, json
 import shutil
 import pandas as pd
+import subprocess
 
 def generate_global_config(bgcflow_dir, global_config):
     """
@@ -24,10 +25,22 @@ def bgcflow_init(bgcflow_dir, global_config):
         print(f"Found config file at: {global_config}")
         with open(global_config, "r") as file:
             config_yaml = yaml.safe_load(file)
-            project_names = [p['name'] for p in config_yaml['projects']]
-            print("Available projects:")
+            project_names = [p for p in config_yaml['projects']]
+            list_of_projects = {}
             for p in project_names:
-                print(f" - {p}")
+                print(p)
+                if p['name'].endswith('.yaml'):
+                    pep = peppy.Project(p['name'], sample_table_index="genome_id")
+                    name = pep.name
+                    file_path = pep.config['sample_table']
+                else:
+                    name = p['name']
+                    file_path = p['samples']
+                list_of_projects[name] = file_path
+
+            print("Available projects:")
+            for p in list_of_projects.keys():
+                print(f" - {p} : {file_path}")
     else:
         generate_global_config(bgcflow_dir, global_config)
     
@@ -131,4 +144,10 @@ def projects_util(**kwargs):
     else:
         bgcflow_init(bgcflow_dir, global_config)
     return
-    
+
+def copy_final_output(**kwargs):
+    bgcflow_dir = Path(kwargs["bgcflow_dir"]).resolve()
+    project_output = bgcflow_dir / f"data/processed/{kwargs['project']}"
+    assert project_output.is_dir(), f"ERROR: Cannot find project [{kwargs['project']}] results. Run `bgcflow_wrapper init` to find available projects."
+    subprocess.call(['rsync', '-avPhr', str(project_output), kwargs['destination']])
+    return
