@@ -91,16 +91,21 @@ def init(**kwargs):
 
 @main.command()
 @click.argument('project')
-@click.argument('destination')
+@click.option('--copy', help='Destination path to copy results.')
 @click.option('--bgcflow_dir', default='.', help='Location of BGCFlow directory. (DEFAULT: Current working directory)')
+#@click.option('--tree',  is_flag=True, help='Show output directory tree structure of a given project.)')
 def get_result(**kwargs):
     """
-    Use rsync to copy a given project results from BGCFlow.
+    View a tree of a project results or get a copy using Rsync.
 
     PROJECT: project name
-    DESTINATION: path to copy results.
     """
-    copy_final_output(**kwargs)
+    if kwargs['copy'] is None:
+        project_dir = Path(kwargs['bgcflow_dir']) / f"data/processed/{kwargs['project']}"
+        subprocess.call(['tree', '-L', '2', project_dir])
+    else:
+        copy_final_output(**kwargs) 
+
 
 @main.command()
 @click.option('--port', default=9999, help='Port to use. (DEFAULT: 9999)')

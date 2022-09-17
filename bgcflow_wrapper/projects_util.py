@@ -149,5 +149,5 @@ def copy_final_output(**kwargs):
     bgcflow_dir = Path(kwargs["bgcflow_dir"]).resolve()
     project_output = bgcflow_dir / f"data/processed/{kwargs['project']}"
     assert project_output.is_dir(), f"ERROR: Cannot find project [{kwargs['project']}] results. Run `bgcflow_wrapper init` to find available projects."
-    subprocess.call(['rsync', '-avPhr', str(project_output), kwargs['destination']])
+    subprocess.call(['rsync', '-avPhr', str(project_output), kwargs['copy']])
     return
