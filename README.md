@@ -33,11 +33,13 @@ Options:
   -h, --help  Show this message and exit.
 
 Commands:
-  clone   Use git to clone BGCFlow to local directory.
-  deploy  [EXPERIMENTAL] Deploy BGCFlow locally using snakedeploy.
-  init    Create projects or initiate BGCFlow config files from template.
-  rules   Get description of available rules from BGCFlow.
-  run     A snakemake CLI wrapper to run BGCFlow.
+  clone       Use git to clone BGCFlow to local directory.
+  deploy      [EXPERIMENTAL] Deploy BGCFlow locally using snakedeploy.
+  get-result  Use rsync to copy a given project results from BGCFlow.
+  init        Create projects or initiate BGCFlow config.
+  rules       Get description of available rules from BGCFlow.
+  run         A snakemake CLI wrapper to run BGCFlow.
+  serve       Run a simple http server of the output directory.
 ```
 
 ## Tutorial
