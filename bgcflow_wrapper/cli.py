@@ -115,8 +115,11 @@ def serve(**kwargs):
     Run a simple http server of the output directory.
     """
     output_dir = Path(kwargs['bgcflow_dir']) / 'data'
+    workflow_dir = Path(kwargs['bgcflow_dir']) / 'workflow'
     assert output_dir.is_dir(), "ERROR: Cannot find BGCFlow directory. Use --bgcflow_dir to set the right location."
-    subprocess.call(['python', '-m', 'http.server', '--directory', str(output_dir), str(kwargs['port'])])
+    subprocess.call(f"(cd {workflow_dir.parent.resolve()} && snakemake --report index.html)", shell=True)
+    subprocess.call(f"(cd {workflow_dir.resolve()} && jupyter nbconvert --execute --to html --output {output_dir.resolve()}/processed/index.html {workflow_dir.resolve()}/notebook/99-entry_point.ipynb --no-input --template classic)", shell=True)
+    subprocess.call(['python', '-m', 'http.server', '--directory', kwargs['bgcflow_dir'], str(kwargs['port'])])
 
 if __name__ == "__main__":
     sys.exit(main())  # pragma: no cover
