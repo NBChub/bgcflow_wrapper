@@ -102,7 +102,7 @@ def get_all_rules(**kwargs):
                 print(f"Citations for {rule_name}:")
                 [print("-", c) for c in data[rule_name]['references']]
 
-            else:
+            if (not type(kwargs['describe']) is str) and (not type(kwargs['cite']) is str):
                 print("Printing available rules:")
                 for item in data.keys():
                     print(f" - {item}")
