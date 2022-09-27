@@ -5,7 +5,7 @@ import requests
 import sys
 import click
 from snakedeploy.deploy import deploy as dplyr
-from git import Repo
+from git import Repo, GitCommandError
 import json
 import time
 
@@ -79,8 +79,11 @@ def cloner(**kwargs):
     destination_dir = Path(kwargs['destination'])
     click.echo(f"Cloning BGCFlow to {destination_dir}...")
     destination_dir.mkdir(parents=True, exist_ok=True)
-    Repo.clone_from("https://github.com/NBChub/bgcflow.git", Path(kwargs['destination']),
-                    branch=kwargs['branch'])
+    try:
+        Repo.clone_from("https://github.com/NBChub/bgcflow.git", Path(kwargs['destination']),
+                        branch=kwargs['branch'])
+    except GitCommandError:
+        print(f"Oops, it seems {kwargs['destination']} already exists and is not an empty directory.")
     return
 
 def get_all_rules(**kwargs):
