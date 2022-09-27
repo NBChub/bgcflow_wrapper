@@ -28,9 +28,8 @@ def bgcflow_init(bgcflow_dir, global_config):
             project_names = [p for p in config_yaml['projects']]
             list_of_projects = {}
             for p in project_names:
-                print(p)
                 if p['name'].endswith('.yaml'):
-                    pep = peppy.Project(p['name'], sample_table_index="genome_id")
+                    pep = peppy.Project(str(bgcflow_dir / p['name']), sample_table_index="genome_id")
                     name = pep.name
                     file_path = pep.config['sample_table']
                 else:
