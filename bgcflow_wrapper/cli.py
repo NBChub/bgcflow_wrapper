@@ -4,6 +4,7 @@ import click
 import bgcflow_wrapper
 from bgcflow_wrapper.bgcflow_wrapper import cloner, deployer, snakemake_wrapper, get_all_rules
 from bgcflow_wrapper.projects_util import projects_util, copy_final_output
+from bgcflow_wrapper.mkdocs import generate_mkdocs_report
 from pathlib import Path
 import subprocess
 
@@ -109,17 +110,28 @@ def get_result(**kwargs):
 
 @main.command()
 @click.option('--port', default=9999, help='Port to use. (DEFAULT: 9999)')
+@click.option('--file_server', default=9998, help='Port to use for fileserver. (DEFAULT: 9998)')
 @click.option('--bgcflow_dir', default='.', help='Location of BGCFlow directory. (DEFAULT: Current working directory)')
+@click.option('--project', default='all', help='Name of the project. (DEFAULT: all)')
 def serve(**kwargs):
     """
-    Run a simple http server of the output directory.
+    Generate static HTML report for BGCFlow run(s)
     """
-    output_dir = Path(kwargs['bgcflow_dir']) / 'data'
-    workflow_dir = Path(kwargs['bgcflow_dir']) / 'workflow'
-    assert output_dir.is_dir(), "ERROR: Cannot find BGCFlow directory. Use --bgcflow_dir to set the right location."
-    subprocess.call(f"(cd {workflow_dir.parent.resolve()} && snakemake --report index.html)", shell=True)
-    subprocess.call(f"(cd {workflow_dir.resolve()} && jupyter nbconvert --execute --to html --output {output_dir.resolve()}/processed/index.html {workflow_dir.resolve()}/notebook/99-entry_point.ipynb --no-input --template classic)", shell=True)
-    subprocess.call(['python', '-m', 'http.server', '--directory', kwargs['bgcflow_dir'], str(kwargs['port'])])
+    if kwargs["project"] == 'all':
+        output_dir = Path(kwargs['bgcflow_dir']) / 'data'
+        workflow_dir = Path(kwargs['bgcflow_dir']) / 'workflow'
+        assert output_dir.is_dir(), "ERROR: Cannot find BGCFlow directory. Use --bgcflow_dir to set the right location."
+        subprocess.call(f"(cd {workflow_dir.parent.resolve()} && snakemake --report index.html)", shell=True)
+        subprocess.call(f"(cd {workflow_dir.resolve()} && jupyter nbconvert --execute --to html --output {output_dir.resolve()}/processed/index.html {workflow_dir.resolve()}/notebook/99-entry_point.ipynb --no-input --template classic)", shell=True)
+        subprocess.call(['python', '-m', 'http.server', '--directory', kwargs['bgcflow_dir'], str(kwargs['port'])])
+    else:
+        bgcflow_dir = kwargs['bgcflow_dir']
+        project_name = kwargs['project']
+        port_id = kwargs['port']
+        file_server = kwargs['file_server']
+        generate_mkdocs_report(bgcflow_dir, project_name, port_id, file_server)
+
+
 
 if __name__ == "__main__":
     sys.exit(main())  # pragma: no cover
