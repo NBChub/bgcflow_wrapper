@@ -73,7 +73,7 @@ def generate_mkdocs_report(bgcflow_dir, project_name, port=9999, fileserver_port
     logging.info(f"Generating homepage at: {docs_dir / 'index.md'}")
     df_results.loc[:, "BGCFlow_rules"] = df_results.index
     df_results = df_results.loc[:, ["BGCFlow_rules", "description"]].reset_index(drop=True)
-    df_results.loc[:, "BGCFlow_rules"] = [f"[{i}]({i}/)" for i in df_results.loc[:, "BGCFlow_rules"]]
+    df_results.loc[:, "BGCFlow_rules"] = [f"[{i}]({i}/)"+"{.md-button}" for i in df_results.loc[:, "BGCFlow_rules"]]
     data = {'p_name' : p.name,
             'p_description' : p.description,
             'p_sample_size' : p.sample_size,
@@ -151,7 +151,7 @@ def signal_handler(signal, frame):
 index_template = """
 {% raw %}
 # `{{ project().name }}`
-BGCFlow Report for: `{{ project().name }}`
+Summary report for project `{{ project().name }}`. Generated using [**`BGCFlow v{{ project().bgcflow_version}}`**](https://github.com/NBChub/bgcflow){:target="_blank"}
 
 ## Project Description
 - {{ project().description }}
@@ -163,9 +163,11 @@ BGCFlow Report for: `{{ project().name }}`
 
 {% raw %}
 ## References
+<font size="2">
 {% for i in project().references %}
   - *{{ i }}*
 {% endfor %}
+</font>
 {% endraw %}
 """
 
@@ -173,7 +175,8 @@ BGCFlow Report for: `{{ project().name }}`
 mkdocs_template = {'site_name': 'BGCFlow report',
                    'theme': {'name': 'material',
                              'palette': [{'primary': 'blue'}],
-                             'features': ['navigation.tabs', 'toc.integrate']
+                             'features': ['navigation.tabs', 'toc.integrate'],
+                             'custom_dir': 'overrides'
                             },
                    'nav': [{'Home': 'index.md'}],
                    'plugins': ['search',
@@ -182,13 +185,17 @@ mkdocs_template = {'site_name': 'BGCFlow report',
                                                    'include_source': True,
                                                    'execute': False}},
                                'macros',
-                               #{'exclude' : {'glob' : 'docs/assets'}}
+                               #{'exclude' : {'glob' : ['docs/assets/*']}}
                               ],
                    #'extra_css': ['https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css'],
                    #'extra_javascript': ['https://code.jquery.com/jquery-3.6.0.slim.min.js',
                    #                     'https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js',
                    #                     'scripts/site.js'
                    #                    ]
+                   'markdown_extensions': ['attr_list'],
+                   'extra': {'social' : [{'icon' : 'fontawesome/brands/twitter', 'link' : 'https://twitter.com/NPGMgroup'},
+                                         {'icon' : 'fontawesome/brands/github', 'link' : 'https://github.com/NBChub/bgcflow'}
+                                        ]}
                   }
 
 # template for mkdocs macros
@@ -209,7 +216,7 @@ class Dict2Class(object):
           text = "\\n".join([text, f"- {r}"])
         return text
         
-    def antismash_server(self):
+    def file_server(self):
         return "{{antismash_port}}"
 
 def define_env(env):

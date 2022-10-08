@@ -129,7 +129,7 @@ def serve(**kwargs):
         project_name = kwargs['project']
         port_id = kwargs['port']
         file_server = kwargs['file_server']
-        generate_mkdocs_report(bgcflow_dir, project_name, port_id, file_server)
+        generate_mkdocs_report(bgcflow_dir, project_name, port_id, file_server, ipynb=False)
 
 
 
