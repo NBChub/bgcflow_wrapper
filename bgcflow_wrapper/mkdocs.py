@@ -6,6 +6,7 @@ import logging
 import os, sys, subprocess
 import yaml
 import signal
+import shutil
 
 log_format = '%(levelname)-8s %(asctime)s   %(message)s'
 date_format = "%d/%m %H:%M:%S"
@@ -32,7 +33,7 @@ def load_project_metadata(path_to_metadata):
         p = Dict2Class(p)
     return p
 
-def generate_mkdocs_report(bgcflow_dir, project_name, port=9999, fileserver_port=9998, ipynb=True):
+def generate_mkdocs_report(bgcflow_dir, project_name, port=8001, fileserver='http://localhost:8002', ipynb=True):
     logging.info("Checking input folder..")
 
     # is it a bgcflow data directory or just a result directory?
@@ -88,7 +89,7 @@ def generate_mkdocs_report(bgcflow_dir, project_name, port=9999, fileserver_port
     logging.info(f"Generating python macros at: {report_dir / 'main.py'}")
     j2_template = Template(macros_template)
     with open(report_dir / "main.py", "w") as f:
-        f.write(j2_template.render({'antismash_port' : fileserver_port}))
+        f.write(j2_template.render({'file_server' : fileserver}))
 
     # generate custom javascripts
     #script_dir = docs_dir / "scripts"
@@ -103,11 +104,15 @@ def generate_mkdocs_report(bgcflow_dir, project_name, port=9999, fileserver_port
     logging.info(f"Extends main html: {override_dir / 'main.html'}")
     with open(override_dir / 'main.html', "w") as f:
         f.write(main_html)
-
     
+    # generate assets
+    asset_path = docs_dir / "assets/bgcflow"
+    asset_path.mkdir(exist_ok=True, parents=True)
+    logging.info(f"Generating assets...")
+    logo_path = asset_path / 'BGCFlow_logo.svg'
+    shutil.copy(Path(__file__).parent / 'outputs/svg/BGCFlow_logo.svg', logo_path)
+
     # generate symlink
-    #asset_path = docs_dir / "assets"
-    #asset_path.mkdir(exist_ok=True, parents=True)
     #for r in ['antismash', 'bigscape']:
     #    target_path_raw = report_dir / r
     #    for target_path in target_path_raw.glob("*"):
@@ -119,31 +124,37 @@ def generate_mkdocs_report(bgcflow_dir, project_name, port=9999, fileserver_port
     #                symlink_path.symlink_to(target_path.resolve())
 
     # Running fileserver
-    fs = subprocess.Popen(["python", "-m", "http.server",'--directory', report_dir, str(fileserver_port)], stderr=subprocess.DEVNULL)
+    if fileserver == 'http://localhost:8002':
+        fs = subprocess.Popen(["python", "-m", "http.server",'--directory', report_dir, fileserver.split(":")[-1]], stderr=subprocess.DEVNULL)
+        fs_run_by_bgcflow = True
+        logging.info(f"Running http file-server. Job id: {fs.pid}")
+    else:
+        fs_run_by_bgcflow  = False
     # dumping file server location
     with open('bgcflow_wrapper.log', "w") as f:
         log_port = {"report_server" : port,
-                    "file_server" : fileserver_port,
-                    "pid" : fs.pid}
+                    "file_server" : fileserver}
+        if fs_run_by_bgcflow:
+            log_port["pid"] = fs.pid
         json.dump(log_port, f, indent=2)
     
-    logging.info(f"File-server job id: {fs.pid}")
     try:
         signal.signal(signal.SIGINT, signal_handler)
         mk = subprocess.call(f'(cd {str(report_dir)} && mkdocs serve -a localhost:{port})', shell=True)
-        fs.kill()
+        if fs_run_by_bgcflow:
+            fs.kill()
         #asset_path.rmdir()
     except subprocess.CalledProcessError as e:
-        print(e)
-        fs.kill()
+        if fs_run_by_bgcflow:
+            fs.kill()
         #asset_path.rmdir()
     return
 
 def signal_handler(signal, frame):
-    print('Thank you for using BGCFlow report!')
-    with open('bgcflow_wrapper.log', "r") as f:
-        log_port = json.load(f)
-        os.kill(log_port['pid'], signal.SIGKILL)
+    print('\nThank you for using BGCFlow Report!')
+    #with open('bgcflow_wrapper.log', "r") as f:
+    #    log_port = json.load(f)
+    #    os.kill(log_port['pid'], signal.signal.SIGKILL)
     sys.exit(0)
 
 
@@ -172,31 +183,68 @@ Summary report for project `{{ project().name }}`. Generated using [**`BGCFlow v
 """
 
 # template for index mkdocs
-mkdocs_template = {'site_name': 'BGCFlow report',
-                   'theme': {'name': 'material',
-                             'palette': [{'primary': 'blue'}],
-                             'features': ['navigation.tabs', 'toc.integrate'],
-                             'custom_dir': 'overrides'
-                            },
-                   'nav': [{'Home': 'index.md'}],
-                   'plugins': ['search',
-                               {'mkdocs-jupyter': {'show_input': False,
-                                                   'no_input': True,
-                                                   'include_source': True,
-                                                   'execute': False}},
-                               'macros',
-                               #{'exclude' : {'glob' : ['docs/assets/*']}}
-                              ],
-                   #'extra_css': ['https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css'],
-                   #'extra_javascript': ['https://code.jquery.com/jquery-3.6.0.slim.min.js',
-                   #                     'https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js',
-                   #                     'scripts/site.js'
-                   #                    ]
-                   'markdown_extensions': ['attr_list'],
-                   'extra': {'social' : [{'icon' : 'fontawesome/brands/twitter', 'link' : 'https://twitter.com/NPGMgroup'},
-                                         {'icon' : 'fontawesome/brands/github', 'link' : 'https://github.com/NBChub/bgcflow'}
-                                        ]}
-                  }
+mkdocs_template = {
+  "extra": {
+    "social": [
+      {
+        "icon": "fontawesome/brands/twitter",
+        "link": "https://twitter.com/NPGMgroup"
+      },
+      {
+        "icon": "fontawesome/brands/github",
+        "link": "https://github.com/NBChub/bgcflow"
+      }
+    ]
+  },
+  "markdown_extensions": [
+    "attr_list"
+  ],
+  "nav": [
+    {
+      "Home": "index.md"
+    }
+  ],
+  "plugins": [
+    "search",
+    {
+      "mkdocs-jupyter": {
+        "execute": False,
+        "include_source": True,
+        "no_input": True,
+        "show_input": False
+      }
+    },
+    "macros"
+  ],
+  "site_name": "BGCFlow Report",
+  "theme": {
+    "custom_dir": "overrides",
+    "features": [
+      "navigation.tabs",
+      "toc.integrate"
+    ],
+    "logo": "assets/bgcflow/BGCFlow_logo.svg",
+    "name": "material",
+    "palette": [
+      {
+        "scheme": "default",
+        "toggle": {
+          "icon": "material/toggle-switch",
+          "name": "Switch to dark mode"
+        },
+        "primary": "blue"
+      },
+      {
+        "scheme": "slate",
+        "toggle": {
+          "icon": "material/toggle-switch-off-outline",
+          "name": "Switch to light mode"
+        },
+        "primary": "blue"
+      }
+    ]
+  }
+}
 
 # template for mkdocs macros
 macros_template = """
@@ -217,7 +265,7 @@ class Dict2Class(object):
         return text
         
     def file_server(self):
-        return "{{antismash_port}}"
+        return "{{ file_server }}"
 
 def define_env(env):
   "Hook function"
@@ -264,5 +312,6 @@ main_html = """
 {% endif %}
 
 {{ super() }}
-{% endblock content %}
+{% endblock %}
+
 """

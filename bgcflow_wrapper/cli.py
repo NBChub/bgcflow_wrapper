@@ -109,8 +109,8 @@ def get_result(**kwargs):
 
 
 @main.command()
-@click.option('--port', default=9999, help='Port to use. (DEFAULT: 9999)')
-@click.option('--file_server', default=9998, help='Port to use for fileserver. (DEFAULT: 9998)')
+@click.option('--port', default=8001, help='Port to use. (DEFAULT: 8001)')
+@click.option('--file_server', default='http://localhost:8002', help='Port to use for fileserver. (DEFAULT: http://localhost:8002)')
 @click.option('--bgcflow_dir', default='.', help='Location of BGCFlow directory. (DEFAULT: Current working directory)')
 @click.option('--project', default='all', help='Name of the project. (DEFAULT: all)')
 def serve(**kwargs):
