@@ -46,7 +46,7 @@ def clone(**kwargs):
 @click.option('--bgcflow_dir', default='.', help='Location of BGCFlow directory. (DEFAULT: Current working directory.)')
 @click.option('--snakefile', default='workflow/Snakefile', help='Location of the Snakefile relative to BGCFlow directory. (DEFAULT: workflow/Snakefile)')
 @click.option('--wms-monitor', default='http://127.0.0.1:5000', help='Panoptes address. (DEFAULT: http://127.0.0.1:5000)')
-@click.option('-c', '--cores', default=32, help='Use at most N CPU cores/jobs in parallel. (DEFAULT: 32)')
+@click.option('-c', '--cores', default=8, help='Use at most N CPU cores/jobs in parallel. (DEFAULT: 8)')
 @click.option('-n', '--dryrun', is_flag=True, help='Test run.')
 @click.option('-t', '--touch', is_flag=True, help='Touch output files (mark them up to date without really changing them).')
 def run(**kwargs):
