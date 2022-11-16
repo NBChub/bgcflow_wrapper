@@ -133,5 +133,20 @@ def serve(**kwargs):
         file_server = kwargs['file_server']
         generate_mkdocs_report(bgcflow_dir, project_name, port_id, file_server, ipynb=False)
 
+@click.option('--bgcflow_dir', default='.', help='Location of BGCFlow directory. (DEFAULT: Current working directory.)')
+@click.option('-c', '--cores', default=8, help='Use at most N CPU cores/jobs in parallel. (DEFAULT: 8)')
+@click.option('-n', '--dryrun', is_flag=True, help='Test run.')
+@main.command()
+def build(**kwargs):
+    """
+    Use DBT to build DuckDB database from BGCFlow results.
+    """
+    dryrun = ""
+    bgcflow_dir = Path(kwargs['bgcflow_dir'])
+    if kwargs["dryrun"]:
+        dryrun = "--dryrun"
+
+    subprocess.call(f"cd {bgcflow_dir.resolve()} && snakemake --use-conda -c {kwargs['cores']} --snakefile workflow/Database --keep-going {dryrun}", shell=True)
+
 if __name__ == "__main__":
     sys.exit(main())  # pragma: no cover
