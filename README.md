@@ -21,9 +21,9 @@ Use conda/mamba to create environment and install the package:
 --------
 ```bash
 
-$ bgcflow_wrapper
+$ bgcflow
 
-Usage: bgcflow_wrapper [OPTIONS] COMMAND [ARGS]...
+Usage: bgcflow [OPTIONS] COMMAND [ARGS]...
 
   A snakemake wrapper and utility tools for BGCFlow
   (https://github.com/NBChub/bgcflow)
@@ -35,11 +35,11 @@ Options:
 Commands:
   clone       Use git to clone BGCFlow to local directory.
   deploy      [EXPERIMENTAL] Deploy BGCFlow locally using snakedeploy.
-  get-result  Use rsync to copy a given project results from BGCFlow.
+  get-result  View a tree of a project results or get a copy using Rsync.
   init        Create projects or initiate BGCFlow config.
   rules       Get description of available rules from BGCFlow.
   run         A snakemake CLI wrapper to run BGCFlow.
-  serve       Run a simple http server of the output directory.
+  serve       Generate static HTML report for BGCFlow run(s)
 ```
 
 ## Tutorial
@@ -50,33 +50,33 @@ conda activate bgcflow_wrapper
 ```
 ```bash
 # get a clone of BGCFlow in your local machine
-bgcflow_wrapper clone MY_BGCFLOW_PATH #change PATH accordingly
+bgcflow clone MY_BGCFLOW_PATH #change PATH accordingly
 ```
 ```bash
 # initiate an example config and projects from template
-bgcflow_wrapper init --bgcflow_dir MY_BGCFLOW_PATH
+bgcflow init --bgcflow_dir MY_BGCFLOW_PATH
 ```
 ```bash
 # do a dry-run
-bgcflow_wrapper run -n --bgcflow_dir MY_BGCFLOW_PATH
+bgcflow run -n --bgcflow_dir MY_BGCFLOW_PATH
 ```
 ```bash
 # find out available rules
-bgcflow_wrapper rules --bgcflow_dir MY_BGCFLOW_PATH
+bgcflow rules --bgcflow_dir MY_BGCFLOW_PATH
 ```
 ```bash
 # get description of a rule
-bgcflow_wrapper rules --describe query-bigslice --bgcflow_dir MY_BGCFLOW_PATH/
+bgcflow rules --describe query-bigslice --bgcflow_dir MY_BGCFLOW_PATH/
 ```
 ```bash
 # get citation of a rule
-bgcflow_wrapper rules --cite query-bigslice --bgcflow_dir MY_BGCFLOW_PATH/
+bgcflow rules --cite query-bigslice --bgcflow_dir MY_BGCFLOW_PATH/
 ```
 ## Generating BGCFlow projects from Jupyter Notebooks
 --------
 You can also generate new projects from Jupyter notebooks:
 ```python
-from bgcflow_wrapper.projects_util import generate_project
+from bgcflow.projects_util import generate_project
 import pandas as pd
 
 df_samples = pd.read_csv('samples.csv', index_col=0)
