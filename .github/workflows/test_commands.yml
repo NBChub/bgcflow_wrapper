@@ -16,9 +16,15 @@ jobs:
           uses: actions/setup-python@v1
           with:
             python-version: "3.8.x"
-        - name: Install dependencies
+        #- name: Install dependencies
+        #  run: |
+        #    $CONDA/bin/conda env update --file env.yaml --name base
+        - name: Pip install
           run: |
-            $CONDA/bin/conda env update --file env.yaml --name base
+            python3 -m venv venv
+            source venv/bin/activate
+            venv/bin/python3 -m pip install --upgrade pip
+            pip install .
         - name: Clone test
           run: |
             bgcflow clone bgcflow_test
