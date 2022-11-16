@@ -31,7 +31,7 @@ setup(
     description="A snakemake and snakedeploy wrapper for BGCFlow.",
     entry_points={
         'console_scripts': [
-            'bgcflow_wrapper=bgcflow_wrapper.cli:main',
+            'bgcflow=bgcflow.cli:main'
         ],
     },
     install_requires=requirements,
@@ -40,7 +40,7 @@ setup(
     include_package_data=True,
     keywords='bgcflow_wrapper',
     name='bgcflow_wrapper',
-    packages=find_packages(include=['bgcflow_wrapper', 'bgcflow_wrapper.*']),
+    packages=find_packages(include=['bgcflow', 'bgcflow.*']),
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/matinnuhamunada/bgcflow_wrapper',
