@@ -112,12 +112,14 @@ def get_result(**kwargs):
 @click.option('--port', default=8001, help='Port to use. (DEFAULT: 8001)')
 @click.option('--file_server', default='http://localhost:8002', help='Port to use for fileserver. (DEFAULT: http://localhost:8002)')
 @click.option('--bgcflow_dir', default='.', help='Location of BGCFlow directory. (DEFAULT: Current working directory)')
-@click.option('--project', default='all', help='Name of the project. (DEFAULT: all)')
+@click.option('--project', help='Name of the project. (DEFAULT: all)')
 def serve(**kwargs):
     """
     Generate static HTML report for BGCFlow run(s)
     """
-    if kwargs["project"] == 'all':
+    if kwargs["project"] == None:
+         click.echo("Use `bgcflow serve --project <project name>` to generate report for each project.\nTo see Snakemake run summary, use `bgcflow serve --project snakemake_report`.")
+    elif kwargs["project"] == 'snakemake_report':
         output_dir = Path(kwargs['bgcflow_dir']) / 'data'
         workflow_dir = Path(kwargs['bgcflow_dir']) / 'workflow'
         assert output_dir.is_dir(), "ERROR: Cannot find BGCFlow directory. Use --bgcflow_dir to set the right location."
@@ -130,8 +132,6 @@ def serve(**kwargs):
         port_id = kwargs['port']
         file_server = kwargs['file_server']
         generate_mkdocs_report(bgcflow_dir, project_name, port_id, file_server, ipynb=False)
-
-
 
 if __name__ == "__main__":
     sys.exit(main())  # pragma: no cover
