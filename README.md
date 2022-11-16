@@ -33,6 +33,7 @@ Options:
   -h, --help  Show this message and exit.
 
 Commands:
+  build       Use DBT to build DuckDB database from BGCFlow results.
   clone       Use git to clone BGCFlow to local directory.
   deploy      [EXPERIMENTAL] Deploy BGCFlow locally using snakedeploy.
   get-result  View a tree of a project results or get a copy using Rsync.
