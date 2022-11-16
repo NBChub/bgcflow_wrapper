@@ -6,7 +6,7 @@ import sys
 import click
 from snakedeploy.deploy import deploy as dplyr
 from git import Repo, GitCommandError
-import json
+import json, yaml
 import time
 
 def snakemake_wrapper(**kwargs):
@@ -89,11 +89,11 @@ def cloner(**kwargs):
 def get_all_rules(**kwargs):
 
     path = Path(kwargs['bgcflow_dir'])
-    rule_file = path / "workflow/rules/rules_main.json"
+    rule_file = path / "workflow/rules.yaml"
 
     if rule_file.is_file():
         with open(rule_file, "r") as file:
-            data = json.load(file)
+            data = yaml.safe_load(file)
         try:
             if type(kwargs['describe']) is str:
                 rule_name = kwargs['describe']
@@ -112,9 +112,9 @@ def get_all_rules(**kwargs):
 
         except KeyError:
             rule_name = [r for r in [kwargs['describe'], kwargs['cite']] if type(r) is str]
-            print(f"ERROR: Cannot find rule {rule_name} in dictionary. Find available rules with `bgcflow_wrapper rules`.")
+            print(f"ERROR: Cannot find rule {rule_name} in dictionary. Find available rules with `bgcflow rules`.")
 
     else:
-        print("ERROR: Cannot find BGCFlow directory.\nPoint to the right directory using `--bgcflow_dir <destination>` or clone BGCFlow using `bgcflow_wrapper clone <destination>`.")
+        print("ERROR: Cannot find BGCFlow directory.\nPoint to the right directory using `--bgcflow_dir <destination>` or clone BGCFlow using `bgcflow clone <destination>`.")
 
     return

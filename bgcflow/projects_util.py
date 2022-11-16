@@ -43,7 +43,7 @@ def bgcflow_init(bgcflow_dir, global_config):
     else:
         generate_global_config(bgcflow_dir, global_config)
     
-    print("Do a test run by: `bgcflow_wrapper run -n`")
+    print("Do a test run by: `bgcflow run -n`")
     
     return
 
@@ -67,8 +67,8 @@ def generate_project(bgcflow_dir, project_name, pep_version="2.1.0", use_project
                      'gtdb-tax': 'OPTIONAL: relative path to your `gtdbtk.bac120.summary.tsv`'
                     }
     if use_project_rules:
-        with open(bgcflow_dir / "workflow/rules/rules.json", "r") as file:
-            available_rules = json.load(file)
+        with open(bgcflow_dir / "workflow/rules.yaml", "r") as file:
+            available_rules = yaml.safeload(file)
             available_rules = {rule : "FALSE" for rule in available_rules.keys()}
             template_dict['rules'] = available_rules
       
@@ -147,6 +147,6 @@ def projects_util(**kwargs):
 def copy_final_output(**kwargs):
     bgcflow_dir = Path(kwargs["bgcflow_dir"]).resolve()
     project_output = bgcflow_dir / f"data/processed/{kwargs['project']}"
-    assert project_output.is_dir(), f"ERROR: Cannot find project [{kwargs['project']}] results. Run `bgcflow_wrapper init` to find available projects."
+    assert project_output.is_dir(), f"ERROR: Cannot find project [{kwargs['project']}] results. Run `bgcflow init` to find available projects."
     subprocess.call(['rsync', '-avPhr', str(project_output), kwargs['copy']])
     return
