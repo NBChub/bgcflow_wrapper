@@ -108,13 +108,13 @@ jobs:
           poetry lock
           poetry build
 
-      - name: publish to Test PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.TEST_PYPI_API_TOKEN}}
-          repository_url: https://test.pypi.org/legacy/
-          skip_existing: true
+      #- name: publish to Test PyPI
+      #  uses: pypa/gh-action-pypi-publish@release/v1
+      #  with:
+      #    user: __token__
+      #    password: ${{ secrets.TEST_PYPI_API_TOKEN}}
+      #    repository_url: https://test.pypi.org/legacy/
+      #    skip_existing: true
 
   notification:
     needs: [test,publish_dev_build]
