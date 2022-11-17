@@ -59,7 +59,7 @@ plugins:
       lang: en
   - mkdocstrings:
       watch:
-        - bgcflow_wrapper
+        - src/bgcflow
 extra:
   version:
     provider: mike
