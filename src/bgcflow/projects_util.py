@@ -1,9 +1,11 @@
-from pathlib import Path, PosixPath
-import peppy
-import yaml, json
+import json
 import shutil
-import pandas as pd
 import subprocess
+from pathlib import Path, PosixPath
+
+import pandas as pd
+import peppy
+import yaml
 
 
 def generate_global_config(bgcflow_dir, global_config):
@@ -127,7 +129,7 @@ def generate_project(
         template_dict["gtdb-tax"] = "gtdbtk.bac120.summary.tsv"
 
     if type(description) == str:
-        print(f"Writing project description...")
+        print("Writing project description...")
         template_dict["description"] = description
 
     print(f"Project config file generated in: {project_dir}")
@@ -158,14 +160,14 @@ def generate_project(
 
 
 def projects_util(**kwargs):
-    pep_version = "2.1.0"
+    # pep_version = "2.1.0"
     bgcflow_dir = Path(kwargs["bgcflow_dir"]).resolve()
     config_dir = bgcflow_dir / "config"
     config_dir.mkdir(parents=True, exist_ok=True)
     global_config = config_dir / "config.yaml"
 
     if type(kwargs["project"]) == str:
-        project_name = kwargs["project"]
+        # project_name = kwargs["project"]
 
         generate_project(
             bgcflow_dir,

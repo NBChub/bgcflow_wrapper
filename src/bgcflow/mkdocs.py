@@ -1,12 +1,15 @@
-from pathlib import Path
-import pandas as pd
 import json
-from jinja2 import Template
 import logging
-import os, sys, subprocess
-import yaml
-import signal
+import os
 import shutil
+import signal
+import subprocess
+import sys
+from pathlib import Path
+
+import pandas as pd
+import yaml
+from jinja2 import Template
 
 log_format = "%(levelname)-8s %(asctime)s   %(message)s"
 date_format = "%d/%m %H:%M:%S"
@@ -123,7 +126,7 @@ def generate_mkdocs_report(
     # generate assets
     asset_path = docs_dir / "assets/bgcflow"
     asset_path.mkdir(exist_ok=True, parents=True)
-    logging.info(f"Generating assets...")
+    logging.info("Generating assets...")
     logo_path = asset_path / "BGCFlow_logo.svg"
     shutil.copy(Path(__file__).parent / "outputs/svg/BGCFlow_logo.svg", logo_path)
 
@@ -164,13 +167,13 @@ def generate_mkdocs_report(
 
     try:
         signal.signal(signal.SIGINT, signal_handler)
-        mk = subprocess.call(
+        subprocess.call(
             f"(cd {str(report_dir)} && mkdocs serve -a localhost:{port})", shell=True
         )
         if fs_run_by_bgcflow:
             fs.kill()
         # asset_path.rmdir()
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError:
         if fs_run_by_bgcflow:
             fs.kill()
         # asset_path.rmdir()

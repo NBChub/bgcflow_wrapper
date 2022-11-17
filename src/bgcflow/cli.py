@@ -1,12 +1,14 @@
 """Console script for bgcflow."""
-import sys
-import click
-import bgcflow
-from bgcflow.bgcflow import cloner, deployer, snakemake_wrapper, get_all_rules
-from bgcflow.projects_util import projects_util, copy_final_output
-from bgcflow.mkdocs import generate_mkdocs_report
-from pathlib import Path
 import subprocess
+import sys
+from pathlib import Path
+
+import click
+
+import bgcflow
+from bgcflow.bgcflow import cloner, deployer, get_all_rules, snakemake_wrapper
+from bgcflow.mkdocs import generate_mkdocs_report
+from bgcflow.projects_util import copy_final_output, projects_util
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
@@ -186,7 +188,7 @@ def serve(**kwargs):
     """
     Generate static HTML report for BGCFlow run(s)
     """
-    if kwargs["project"] == None:
+    if kwargs["project"] is None:
         click.echo(
             "Use `bgcflow serve --project <project name>` to generate report for each project.\nTo see Snakemake run summary, use `bgcflow serve --project snakemake_report`."
         )

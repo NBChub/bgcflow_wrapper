@@ -1,18 +1,18 @@
 """Main module."""
-from pathlib import Path
+import json
 import subprocess
-import requests
 import sys
-import click
-from snakedeploy.deploy import deploy as dplyr
-from git import Repo, GitCommandError
-import json, yaml
 import time
+from pathlib import Path
+
+import click
+import requests
+import yaml
+from git import GitCommandError, Repo
+from snakedeploy.deploy import deploy as dplyr
 
 
 def snakemake_wrapper(**kwargs):
-    bgcflow_dir = Path(kwargs["bgcflow_dir"])
-    snakefile_path = bgcflow_dir / kwargs["snakefile"]
 
     p = "Empty process catcher"
 
@@ -32,7 +32,7 @@ def snakemake_wrapper(**kwargs):
         status = item.json()["status"]
         assert status == "running"
         click.echo(f"Panoptes already {status} on {kwargs['wms_monitor']}")
-    except requests.exceptions.RequestException as e:  # This is the correct syntax
+    except requests.exceptions.RequestException:  # This is the correct syntax
         click.echo(
             f"Running Panoptes to monitor BGCFlow jobs at {kwargs['wms_monitor']}"
         )
@@ -51,7 +51,7 @@ def snakemake_wrapper(**kwargs):
             if status == "running":
                 click.echo(f"Panoptes status: {status}")
                 break
-        except requests.exceptions.RequestException as e:  # This is the correct syntax
+        except requests.exceptions.RequestException:  # This is the correct syntax
             click.echo(f"Retrying to connect: {ctr}x")
             ctr = ctr + 1
             time.sleep(1)
@@ -62,7 +62,7 @@ def snakemake_wrapper(**kwargs):
     # run snakemake
     snakemake_command = f"cd {kwargs['bgcflow_dir']} && snakemake --use-conda --keep-going --rerun-incomplete --rerun-triggers mtime -c {kwargs['cores']} {dryrun} {touch} --wms-monitor {kwargs['wms_monitor']}"
     click.echo(snakemake_command)
-    snakemake_run = subprocess.call(snakemake_command, shell=True)
+    subprocess.call(snakemake_command, shell=True)
     try:
         if not type(p) == str:
             click.echo(f"Killing panoptes: PID {p.pid}")
