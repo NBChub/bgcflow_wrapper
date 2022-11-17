@@ -74,7 +74,8 @@ jobs:
 
       - uses: codecov/codecov-action@v3
         with:
-          fail_ci_if_error: true
+          version: "v0.1.15"
+          fail_ci_if_error: false
 
   publish_dev_build:
     # if test failed, we should not publish
