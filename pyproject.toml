@@ -52,6 +52,9 @@ snakedeploy = "^0.8.2"
 gitpython = "^3.1.29"
 peppy = {git = "https://github.com/matinnuhamunada/peppy.git"}
 panoptes-ui = "^0.2.0"
+snakemake = "^7.18.2"
+mkdocs-jupyter = "^0.22.0"
+mkdocs-macros-plugin = "^0.7.0"
 
 [tool.poetry.extras]
 test = [
