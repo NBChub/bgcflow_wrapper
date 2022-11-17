@@ -1,21 +1,28 @@
 # bgcflow_wrapper
-[![Snakemake](https://img.shields.io/badge/snakemake-≥7.14.0-brightgreen.svg)](https://snakemake.bitbucket.io)
+
+
+<p align="center">
+<a href="https://pypi.python.org/pypi/bgcflow_wrapper">
+    <img src="https://img.shields.io/pypi/v/bgcflow_wrapper.svg"
+        alt = "Release Status">
+</a>
+
+<a href="https://github.com/matinnuhamunada/bgcflow_wrapper/actions">
+    <img src="https://github.com/matinnuhamunada/bgcflow_wrapper/actions/workflows/main.yml/badge.svg?branch=release" alt="CI Status">
+</a>
+
+<a href="https://matinnuhamunada.github.io/bgcflow_wrapper/">
+    <img src="https://img.shields.io/website/https/matinnuhamunada.github.io/bgcflow_wrapper/index.html.svg?label=docs&down_message=unavailable&up_message=available" alt="Documentation Status">
+</a>
+
+</p>
+
 
 A snakemake wrapper and utility tools for [BGCFlow](https://github.com/NBChub/bgcflow).
 
-## Usage
---------
-Clone this repository:
 
-    git clone git@github.com:matinnuhamunada/bgcflow_wrapper.git
-
-Use conda/mamba to create environment and install the package:
-
-    cd bgcflow_wrapper
-    mamba env create -f env.yaml
-    cd ..
-
->**Developer Note**: BGCFlow wrapper are still in development phase. We will make it available to install using `pip` when BGCFlow wrapper is released.
+* Free software: MIT
+* Documentation: <https://matinnuhamunada.github.io/bgcflow_wrapper/>
 
 ## Features
 --------
@@ -42,6 +49,20 @@ Commands:
   run         A snakemake CLI wrapper to run BGCFlow.
   serve       Generate static HTML report for BGCFlow run(s)
 ```
+
+## Usage
+--------
+Clone this repository:
+
+    git clone git@github.com:matinnuhamunada/bgcflow_wrapper.git
+
+Use conda/mamba to create environment and install the package:
+
+    cd bgcflow_wrapper
+    mamba env create -f env.yaml
+    cd ..
+
+>**Developer Note**: BGCFlow wrapper are still in development phase. We will make it available to install using `pip` when BGCFlow wrapper is released.
 
 ## Tutorial
 --------
@@ -94,6 +115,5 @@ generate_project("BGCFLOW_PATH",
 ```
 
 ## Credits
--------
 
-This package was created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [`audreyr/cookiecutter-pypackage`](https://github.com/audreyr/cookiecutter-pypackage) project template.
+This package was created with the [ppw](https://zillionare.github.io/python-project-wizard) tool. For more information, please visit the [project page](https://zillionare.github.io/python-project-wizard/).
