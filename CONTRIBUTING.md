@@ -9,7 +9,7 @@ You can contribute in many ways:
 
 ### Report Bugs
 
-Report bugs at https://github.com/matinnuhamunada/bgcflow_wrapper/issues.
+Report bugs at [https://github.com/matinnuhamunada/bgcflow_wrapper/issues](https://github.com/matinnuhamunada/bgcflow_wrapper/issues).
 
 If you are reporting a bug, please include:
 
@@ -29,8 +29,8 @@ and "help wanted" is open to whoever wants to implement it.
 
 ### Write Documentation
 
-bgcflow_wrapper could always use more documentation, whether as part of the
-official bgcflow_wrapper docs, in docstrings, or even on the web in blog posts,
+`bgcflow_wrapper` could always use more documentation, whether as part of the
+official `bgcflow_wrapper` docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
 ### Submit Feedback
@@ -95,8 +95,8 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
    feature to the list in README.md.
-3. The pull request should work for Python 3.6, 3.7, 3.8, 3.9 and for PyPy. Check
-   https://github.com/matinnuhamunada/bgcflow_wrapper/actions
+3. The pull request should work for Python `3.8`, `3.9`, `3.10` and for PyPy. Check
+   [https://github.com/matinnuhamunada/bgcflow_wrapper/actions](https://github.com/matinnuhamunada/bgcflow_wrapper/actions)
    and make sure that the tests pass for all supported Python versions.
 
 ## Tips```

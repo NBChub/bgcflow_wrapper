@@ -2,7 +2,8 @@
 
 ## Development Lead
 
-* Matin Nuhamunada <matinnuhamunada@gmail.com>
+* Matin Nuhamunada <matinnu@biosustain.dtu.dk>
+* Omkar S. Mohite <omkmoh@biosustain.dtu.dk>
 
 ## Contributors
 

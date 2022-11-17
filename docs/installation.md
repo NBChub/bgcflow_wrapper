@@ -1,12 +1,11 @@
-# Installation
-
 ## Stable release
+> :warning: `bgcflow_wrapper` does not have a stable release yet!
 
 To install bgcflow_wrapper, run this command in your
 terminal:
 
 ``` console
-pip install bgcflow_wrapper
+pip install git+https://github.com/matinnuhamunada/bgcflow_wrapper.git
 ```
 
 This is the preferred method to install bgcflow_wrapper, as it will always install the most recent stable release.
