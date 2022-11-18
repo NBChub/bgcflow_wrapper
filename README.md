@@ -7,12 +7,12 @@
         alt = "Release Status">
 </a>
 
-<a href="https://github.com/matinnuhamunada/bgcflow_wrapper/actions">
-    <img src="https://github.com/matinnuhamunada/bgcflow_wrapper/actions/workflows/main.yml/badge.svg?branch=release" alt="CI Status">
+<a href="https://github.com/NBChub/bgcflow_wrapper/actions">
+    <img src="https://github.com/NBChub/bgcflow_wrapper/actions/workflows/main.yml/badge.svg?branch=release" alt="CI Status">
 </a>
 
-<a href="https://matinnuhamunada.github.io/bgcflow_wrapper/">
-    <img src="https://img.shields.io/website/https/matinnuhamunada.github.io/bgcflow_wrapper/index.html.svg?label=docs&down_message=unavailable&up_message=available" alt="Documentation Status">
+<a href="https://NBChub.github.io/bgcflow_wrapper/">
+    <img src="https://img.shields.io/website/https/NBChub.github.io/bgcflow_wrapper/index.html.svg?label=docs&down_message=unavailable&up_message=available" alt="Documentation Status">
 </a>
 
 </p>
@@ -20,7 +20,7 @@
 
 A snakemake wrapper and utility tools for [BGCFlow](https://github.com/NBChub/bgcflow).
 
-For more details, see [documentation](https://matinnuhamunada.github.io/bgcflow_wrapper/).
+For more details, see [documentation](https://NBChub.github.io/bgcflow_wrapper/).
 
 
 ## Setup
@@ -34,7 +34,7 @@ python -m venv env
 source env/bin/activate
 
 # install BGCFlow wrapper
-pip install git+https://github.com/matinnuhamunada/bgcflow_wrapper.git
+pip install git+https://github.com/NBChub/bgcflow_wrapper.git
 ```
 
 ## Features
