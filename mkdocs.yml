@@ -1,6 +1,6 @@
 site_name: bgcflow_wrapper
-site_url: https://matinnuhamunada.github.io/bgcflow_wrapper/
-repo_url: https://github.com/matinnuhamunada/bgcflow_wrapper
+site_url: https://NBChub.github.io/bgcflow_wrapper/
+repo_url: https://github.com/NBChub/bgcflow_wrapper
 repo_name: bgcflow_wrapper
 #strict: true
 nav:
@@ -74,7 +74,7 @@ extra:
       # link: http://www.jieyu.ai
       # name: Facebook
     - icon: fontawesome/brands/github
-      link: https://github.com/matinnuhamunada/bgcflow_wrapper
+      link: https://github.com/NBChub/bgcflow_wrapper
       name: Github
     - icon: material/email
       link: "mailto:matinnu@biosustain.dtu.dk"

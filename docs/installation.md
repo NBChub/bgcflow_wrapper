@@ -5,7 +5,7 @@ To install bgcflow_wrapper, run this command in your
 terminal:
 
 ``` console
-pip install git+https://github.com/matinnuhamunada/bgcflow_wrapper.git
+pip install git+https://github.com/NBChub/bgcflow_wrapper.git
 ```
 
 This is the preferred method to install bgcflow_wrapper, as it will always install the most recent stable release.
@@ -21,13 +21,13 @@ the [Github repo][].
 You can either clone the public repository:
 
 ``` console
-git clone git://github.com/matinnuhamunada/bgcflow_wrapper
+git clone git://github.com/NBChub/bgcflow_wrapper
 ```
 
 Or download the [tarball][]:
 
 ``` console
-curl -OJL https://github.com/matinnuhamunada/bgcflow_wrapper/tarball/master
+curl -OJL https://github.com/NBChub/bgcflow_wrapper/tarball/master
 ```
 
 Once you have a copy of the source, you can install it with:
