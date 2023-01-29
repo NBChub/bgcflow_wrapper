@@ -39,15 +39,15 @@ def deploy(**kwargs):
 @click.option(
     "--branch",
     default="main",
-    help="BGCFlow branch. (DEFAULT: `dev-snakemake-wrapper`)",
+    help="BGCFlow branch. (DEFAULT: `main`)",
 )
 def clone(**kwargs):
     """
-    Use git to clone BGCFlow to local directory.
+    Get a clone of BGCFlow to local directory.
 
     DESTINATION: path to clone BGCFlow
 
-    BRANCH: BGCFlow branch to clone. Currently using development branch: `dev-snakemake-wrapper`
+    BRANCH: BGCFlow branch to clone.
     """
     cloner(**kwargs)
 
@@ -187,7 +187,7 @@ def get_result(**kwargs):
 @click.option("--project", help="Name of the project. (DEFAULT: all)")
 def serve(**kwargs):
     """
-    Generate static HTML report for BGCFlow run(s)
+    Serve static HTML report or other utilities (Metabase, etc.).
     """
     workflow_dir = Path(kwargs["bgcflow_dir"]) / "workflow"
     if kwargs["metabase"]:
