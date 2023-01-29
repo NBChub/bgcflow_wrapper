@@ -54,13 +54,13 @@ Options:
 
 Commands:
   build       Use DBT to build DuckDB database from BGCFlow results.
-  clone       Use git to clone BGCFlow to local directory.
+  clone       Get a clone of BGCFlow to local directory.
   deploy      [EXPERIMENTAL] Deploy BGCFlow locally using snakedeploy.
   get-result  View a tree of a project results or get a copy using Rsync.
   init        Create projects or initiate BGCFlow config.
-  rules       Get description of available rules from BGCFlow.
+  pipelines   Get description of available pipelines from BGCFlow.
   run         A snakemake CLI wrapper to run BGCFlow.
-  serve       Generate static HTML report for BGCFlow run(s)
+  serve       Serve static HTML report or other utilities (Metabase, etc.).
 ```
 
 ## Credits
