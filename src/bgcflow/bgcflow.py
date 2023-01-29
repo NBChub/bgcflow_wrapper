@@ -60,7 +60,7 @@ def snakemake_wrapper(**kwargs):
             time.sleep(1)
 
     # run snakemake
-    snakemake_command = f"cd {kwargs['bgcflow_dir']} && snakemake --use-conda --keep-going --rerun-incomplete --rerun-triggers mtime -c {kwargs['cores']} {dryrun} {touch} --wms-monitor {kwargs['wms_monitor']}"
+    snakemake_command = f"cd {kwargs['bgcflow_dir']} && snakemake --snakefile {kwargs['snakefile']} --use-conda --keep-going --rerun-incomplete --rerun-triggers mtime -c {kwargs['cores']} {dryrun} {touch} --wms-monitor {kwargs['wms_monitor']}"
     click.echo(snakemake_command)
     subprocess.call(snakemake_command, shell=True)
     try:

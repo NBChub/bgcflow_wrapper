@@ -155,7 +155,7 @@ def init(**kwargs):
     default=".",
     help="Location of BGCFlow directory. (DEFAULT: Current working directory)",
 )
-# @click.option('--tree',  is_flag=True, help='Show output directory tree structure of a given project.)')
+@click.option('--copy-links',  is_flag=True, help='Resolve symlinks as file/folders.)')
 def get_result(**kwargs):
     """
     View a tree of a project results or get a copy using Rsync.
@@ -166,7 +166,9 @@ def get_result(**kwargs):
         project_dir = (
             Path(kwargs["bgcflow_dir"]) / f"data/processed/{kwargs['project']}"
         )
-        subprocess.call(["tree", "-L", "2", project_dir])
+        print(f"Available items from {project_dir}:")
+        [print(" -", item.name) for item in project_dir.glob("*")]
+        print(f"Use --copy <DESTINATION> for copying items to destination path")
     else:
         copy_final_output(**kwargs)
 
