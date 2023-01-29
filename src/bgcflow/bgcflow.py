@@ -78,7 +78,7 @@ def deployer(**kwargs):
         branch=kwargs["branch"],
         name="bgcflow",
         dest_path=Path(kwargs["destination"]),
-        tag="v0.3.3-alpha",
+        tag="v0.5.2-alpha",
     )
     return
 

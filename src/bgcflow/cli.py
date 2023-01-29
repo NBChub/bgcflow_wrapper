@@ -95,11 +95,11 @@ def run(**kwargs):
     default=".",
     help="Location of BGCFlow directory. (DEFAULT: Current working directory)",
 )
-@click.option("--describe", help="Get description of a given rule.")
-@click.option("--cite", help="Get citation of a given rule.")
-def rules(**kwargs):
+@click.option("--describe", help="Get description of a given pipeline.")
+@click.option("--cite", help="Get citation of a given pipeline.")
+def pipelines(**kwargs):
     """
-    Get description of available rules from BGCFlow.
+    Get description of available pipelines from BGCFlow.
 
     """
     get_all_rules(**kwargs)
@@ -116,9 +116,9 @@ def rules(**kwargs):
     help="Initiate a new BGCFlow project. Insert project name: `bgcflow init --project <TEXT>`",
 )
 @click.option(
-    "--use_own_rules",
+    "--use_project_pipeline",
     is_flag=True,
-    help="Generate rule selection template in PEP file instead of using Global rules. Use with `--project` option.",
+    help="Generate pipeline selection template in PEP file instead of using Global pipelines. Use with `--project` option.",
 )
 @click.option(
     "--prokka_db", help="Path to custom reference file. Use with `--project` option."
@@ -183,18 +183,24 @@ def get_result(**kwargs):
     default=".",
     help="Location of BGCFlow directory. (DEFAULT: Current working directory)",
 )
+@click.option("--metabase", is_flag=True, help="Run Metabase server at http://localhost:3000. Requires Java to be installed. See: https://www.metabase.com/docs/latest/installation-and-operation/java-versions")
 @click.option("--project", help="Name of the project. (DEFAULT: all)")
 def serve(**kwargs):
     """
     Generate static HTML report for BGCFlow run(s)
     """
-    if kwargs["project"] is None:
+    workflow_dir = Path(kwargs["bgcflow_dir"]) / "workflow"
+    if kwargs["metabase"]:
+        subprocess.call(
+            f"(cd {workflow_dir.parent.resolve()} && snakemake --snakefile workflow/Metabase -c 1)",
+            shell=True,
+        )
+    elif kwargs["project"] is None:
         click.echo(
             "Use `bgcflow serve --project <project name>` to generate report for each project.\nTo see Snakemake run summary, use `bgcflow serve --project snakemake_report`."
         )
     elif kwargs["project"] == "snakemake_report":
         output_dir = Path(kwargs["bgcflow_dir"]) / "data"
-        workflow_dir = Path(kwargs["bgcflow_dir"]) / "workflow"
         assert (
             output_dir.is_dir()
         ), "ERROR: Cannot find BGCFlow directory. Use --bgcflow_dir to set the right location."
