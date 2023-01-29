@@ -188,5 +188,11 @@ def copy_final_output(**kwargs):
     assert (
         project_output.is_dir()
     ), f"ERROR: Cannot find project [{kwargs['project']}] results. Run `bgcflow init` to find available projects."
-    subprocess.call(["rsync", "-avPhr", str(project_output), kwargs["copy"]])
+    if "copy_links" in kwargs.keys():
+        if kwargs["copy_links"]:
+            copy_links = "-L"
+    else:
+        copy_links = ""
+    exclude_copy = f"{str(project_output.stem)}/bigscape/*/cache"
+    subprocess.call(["rsync", "-avPhr", copy_links, str(project_output), kwargs["copy"], "--exclude", exclude_copy])
     return
