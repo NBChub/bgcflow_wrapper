@@ -39,8 +39,8 @@ pip install git+https://github.com/NBChub/bgcflow_wrapper.git
 ```
 
 ### Setup via Python venv
-Alternative, using python virtual environment:
-````bash
+Alternative way to setup using python virtual environment:
+```bash
 # create and activate python virtual environment
 python -m venv env
 source env/bin/activate
