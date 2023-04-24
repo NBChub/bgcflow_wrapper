@@ -100,7 +100,7 @@ def generate_mkdocs_report(
         "rule_table": df_results.to_markdown(index=False),
     }
     j2_template = Template(index_template)
-    with open(docs_dir / "index.md", "w") as f:
+    with open(docs_dir / "index.md", "w", encoding='utf-8') as f:
         f.write(j2_template.render(data))
 
     # generate main.py macros
