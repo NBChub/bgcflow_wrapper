@@ -25,11 +25,23 @@ For more details, see [documentation](https://NBChub.github.io/bgcflow_wrapper/)
 
 ## Setup
 --------
-To install bgcflow_wrapper, run this command in your
+### Setup via Conda
+To install `bgcflow_wrapper` with conda, run this command in your
 terminal:
 
 ```bash
-# create a new virtual environment
+# create and activate new conda environment
+conda create -n bgcflow pip -y
+conda activate bgcflow
+
+# install BGCFlow wrapper
+pip install git+https://github.com/NBChub/bgcflow_wrapper.git
+```
+
+### Setup via Python venv
+Alternative, using python virtual environment:
+````bash
+# create and activate python virtual environment
 python -m venv env
 source env/bin/activate
 
