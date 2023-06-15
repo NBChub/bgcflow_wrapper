@@ -155,7 +155,7 @@ def init(**kwargs):
     default=".",
     help="Location of BGCFlow directory. (DEFAULT: Current working directory)",
 )
-@click.option('--copy-links',  is_flag=True, help='Resolve symlinks as file/folders.)')
+@click.option("--copy-links", is_flag=True, help="Resolve symlinks as file/folders.)")
 def get_result(**kwargs):
     """
     View a tree of a project results or get a copy using Rsync.
@@ -168,7 +168,7 @@ def get_result(**kwargs):
         )
         print(f"Available items from {project_dir}:")
         [print(" -", item.name) for item in project_dir.glob("*")]
-        print(f"Use --copy <DESTINATION> for copying items to destination path")
+        print("Use --copy <DESTINATION> for copying items to destination path")
     else:
         copy_final_output(**kwargs)
 
@@ -185,7 +185,11 @@ def get_result(**kwargs):
     default=".",
     help="Location of BGCFlow directory. (DEFAULT: Current working directory)",
 )
-@click.option("--metabase", is_flag=True, help="Run Metabase server at http://localhost:3000. Requires Java to be installed. See: https://www.metabase.com/docs/latest/installation-and-operation/java-versions")
+@click.option(
+    "--metabase",
+    is_flag=True,
+    help="Run Metabase server at http://localhost:3000. Requires Java to be installed. See: https://www.metabase.com/docs/latest/installation-and-operation/java-versions",
+)
 @click.option("--project", help="Name of the project. (DEFAULT: all)")
 def serve(**kwargs):
     """
