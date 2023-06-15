@@ -19,13 +19,13 @@ Options:
 
 Commands:
   build       Use DBT to build DuckDB database from BGCFlow results.
-  clone       Use git to clone BGCFlow to local directory.
+  clone       Get a clone of BGCFlow to local directory.
   deploy      [EXPERIMENTAL] Deploy BGCFlow locally using snakedeploy.
   get-result  View a tree of a project results or get a copy using Rsync.
   init        Create projects or initiate BGCFlow config.
-  rules       Get description of available rules from BGCFlow.
+  pipelines   Get description of available pipelines from BGCFlow.
   run         A snakemake CLI wrapper to run BGCFlow.
-  serve       Generate static HTML report for BGCFlow run(s)
+  serve       Serve static HTML report or other utilities (Metabase, etc.).
 ```
 
 ### Typical Usage
@@ -52,19 +52,19 @@ bgcflow run -n --bgcflow_dir MY_BGCFLOW_PATH
 - To find out all the rules that can be added in the configuration file, do:
 ```bash
 # find out available rules
-bgcflow rules --bgcflow_dir MY_BGCFLOW_PATH
+bgcflow pipelines --bgcflow_dir MY_BGCFLOW_PATH
 ```
 
 - To get more details about each individual rules, do:
 ```bash
 # get description of a rule
-bgcflow rules --describe antismash --bgcflow_dir MY_BGCFLOW_PATH/
+bgcflow pipelines --describe antismash --bgcflow_dir MY_BGCFLOW_PATH/
 ```
 
 - To find out how to cite each rules, do:
 ```bash
 # get citation of a rule
-bgcflow rules --cite antismash --bgcflow_dir MY_BGCFLOW_PATH/
+bgcflow pipelines --cite antismash --bgcflow_dir MY_BGCFLOW_PATH/
 ```
 ## Using as a python library
 --------
