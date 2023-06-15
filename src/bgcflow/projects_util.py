@@ -194,5 +194,15 @@ def copy_final_output(**kwargs):
     else:
         copy_links = ""
     exclude_copy = f"{str(project_output.stem)}/bigscape/*/cache"
-    subprocess.call(["rsync", "-avPhr", copy_links, str(project_output), kwargs["copy"], "--exclude", exclude_copy])
+    subprocess.call(
+        [
+            "rsync",
+            "-avPhr",
+            copy_links,
+            str(project_output),
+            kwargs["copy"],
+            "--exclude",
+            exclude_copy,
+        ]
+    )
     return
