@@ -22,6 +22,8 @@ A snakemake wrapper and utility tools for [BGCFlow](https://github.com/NBChub/bg
 
 For more details, see [documentation](https://NBChub.github.io/bgcflow_wrapper/).
 
+## Publication
+> Matin Nuhamunada, Omkar S. Mohite, Patrick V. Phaneuf, Bernhard O. Palsson, and Tilmann Weber. (2023). BGCFlow: Systematic pangenome workflow for the analysis of biosynthetic gene clusters across large genomic datasets. bioRxiv 2023.06.14.545018; doi: [https://doi.org/10.1101/2023.06.14.545018](https://doi.org/10.1101/2023.06.14.545018)
 
 ## Setup
 --------
