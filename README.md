@@ -18,7 +18,7 @@
 </p>
 
 
-A snakemake wrapper and utility tools for [BGCFlow](https://github.com/NBChub/bgcflow).
+A snakemake wrapper and utility tools for [BGCFlow](https://github.com/NBChub/bgcflow), a systematic workflow for the analysis of biosynthetic gene clusters across large genomic datasets.
 
 For more details, see [documentation](https://NBChub.github.io/bgcflow_wrapper/).
 
@@ -38,18 +38,8 @@ conda activate bgcflow
 pip install git+https://github.com/NBChub/bgcflow_wrapper.git
 ```
 
-### Setup via Python venv
-Alternative way to setup using python virtual environment:
-```bash
-# create and activate python virtual environment
-python -m venv env
-source env/bin/activate
-
-# install BGCFlow wrapper
-pip install git+https://github.com/NBChub/bgcflow_wrapper.git
-```
-
 ## Features
+![function](docs/assets/Figure_01.png)
 --------
 ```bash
 
