@@ -172,7 +172,7 @@ def projects_util(**kwargs):
         generate_project(
             bgcflow_dir,
             kwargs["project"],
-            use_project_rules=kwargs["use_own_rules"],
+            use_project_rules=kwargs["use_project_pipeline"],
             prokka_db=kwargs["prokka_db"],
             gtdb_tax=kwargs["gtdb_tax"],
             samples_csv=kwargs["samples_csv"],
