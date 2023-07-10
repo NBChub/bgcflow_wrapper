@@ -142,6 +142,16 @@ def generate_project(
     with open(bgcflow_dir / "config/config.yaml", "r") as file:
         print("Updating global config.yaml")
         main_config = yaml.safe_load(file)
+
+        # mask pep and name as alias
+        for item in main_config["projects"]:
+            if "pep" in item:
+                item["name"] = item.pop("pep")
+
+        # mask rules and pipelines as alias
+        if "pipelines" in main_config.keys():
+            main_config["rules"] = main_config.pop("pipelines")
+
         project_names = [p["name"] for p in main_config["projects"]]
         assert (
             project_name not in project_names
