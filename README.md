@@ -41,7 +41,7 @@ pip install git+https://github.com/NBChub/bgcflow_wrapper.git
 ```
 
 ## Features
-![function](docs/assets/Figure_01.png)
+![function](https://raw.githubusercontent.com/NBChub/bgcflow_wrapper/main/docs/assets/Figure_01.png)
 --------
 ```bash
 
