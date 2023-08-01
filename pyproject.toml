@@ -31,7 +31,6 @@ flake8  = { version = "4.0.1", optional = true}
 flake8-docstrings = { version = "^1.6.0", optional = true }
 pytest  = ">=7.2.0"
 pytest-cov  = { version = "^3.0.0", optional = true}
-tox  = { version = "^3.24.5", optional = true}
 virtualenv  = { version = "^20.13.1", optional = true}
 pip  = { version = "^22.0.3", optional = true}
 mkdocs  = { version = "^1.2.3", optional = true}
@@ -57,6 +56,7 @@ mkdocs-macros-plugin = "^0.7.0"
 setuptools = "^65.5.1"
 numpy = ">=1.22.0"
 sqlalchemy = "1.4.46"
+tox = "^4.6.4"
 
 [tool.poetry.extras]
 test = [
