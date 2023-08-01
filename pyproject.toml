@@ -56,7 +56,7 @@ mkdocs-macros-plugin = "^0.7.0"
 setuptools = "^65.5.1"
 numpy = ">=1.22.0"
 sqlalchemy = "1.4.46"
-tox = "^4.6.4"
+tox = {version = "^4.6.4", optional = true}
 
 [tool.poetry.extras]
 test = [
