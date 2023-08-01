@@ -14,7 +14,7 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
-@click.version_option(version=bgcflow.__version__)
+@click.version_option(version=bgcflow.__version__, prog_name='bgcflow_wrapper')
 def main():
     """
     A snakemake wrapper and utility tools for BGCFlow (https://github.com/NBChub/bgcflow)
