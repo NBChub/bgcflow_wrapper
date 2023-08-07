@@ -2,8 +2,9 @@
 [tool.poetry]
 name = "bgcflow_wrapper"
 version = "0.2.5"
-homepage = "https://github.com/NBChub/bgcflow_wrapper"
-description = "A snakemake wrapper and utility tools for BGCFlow.."
+documentation = "https://nbchub.github.io/bgcflow_wrapper"
+repository = "https://github.com/NBChub/bgcflow_wrapper"
+description = "A snakemake wrapper and utility tools command line interface for BGCFlow."
 authors = ["Matin Nuhamunada <matinnu@biosustain.dtu.dk>"]
 readme = "README.md"
 license =  "MIT"
