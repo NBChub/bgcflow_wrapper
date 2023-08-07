@@ -10,7 +10,16 @@ import yaml
 
 def generate_global_config(bgcflow_dir, global_config):
     """
-    Copy config.yaml from template to config directory
+    Generate a BGCFlow global configuration file from a template.
+
+    Copies the template configuration file to the specified global configuration path.
+
+    Parameters:
+        bgcflow_dir (str or pathlib.PosixPath): The directory where the BGCFlow configuration is located.
+        global_config (str or pathlib.PosixPath): The path to the global configuration file to be generated.
+
+    Returns:
+        None
     """
     print(f"Generating config file from template at: {global_config}")
     template_config = bgcflow_dir / ".examples/_config_example.yaml"
@@ -23,7 +32,18 @@ def generate_global_config(bgcflow_dir, global_config):
 
 def bgcflow_init(bgcflow_dir, global_config):
     """
-    Initiate a config from template
+    Initialize BGCFlow configuration and display available projects.
+
+    Initializes BGCFlow configuration based on the provided directory and global configuration path.
+    If the global configuration file exists, it lists the available projects.
+    If not, generates a global configuration file from the template and provides instructions for a test run.
+
+    Parameters:
+        bgcflow_dir (str or pathlib.PosixPath): The directory where the BGCFlow configuration is located.
+        global_config (str or pathlib.PosixPath): The path to the global configuration file.
+
+    Returns:
+        None
     """
     # check if global config available
     if global_config.is_file():
@@ -67,14 +87,32 @@ def generate_project(
     description=False,
 ):
     """
-    Generate a PEP project in BGCFlow config file:
-    Params:
-        - samples_csv
+    Generate a PEP project configuration in BGCFlow.
+
+    This function creates a configuration file for a Project Enhanced Pipelines (PEP)
+    project within the BGCFlow framework. It allows you to define various aspects of
+    the project, such as its name, version, description, sample data, custom annotations,
+    and more.
+
+    Parameters:
+        bgcflow_dir (str or pathlib.PosixPath): The directory where the BGCFlow configuration is located.
+        project_name (str): The name of the project.
+        pep_version (str, optional): The version of the PEP specification. Defaults to "2.1.0".
+        use_project_rules (bool, optional): Flag indicating whether to use project-specific rules. Defaults to False.
+        samples_csv (pd.core.frame.DataFrame or str, optional): Sample data in Pandas DataFrame or path to a CSV file. Defaults to False.
+        prokka_db (str, optional): Path to a custom Prokka annotation file. Defaults to False.
+        gtdb_tax (str, optional): Path to a custom GTDB taxonomy file. Defaults to False.
+        description (str, optional): Description for the project. Defaults to False.
+
+    Returns:
+        None
     """
-    if bgcflow_dir is PosixPath:
-        pass
-    else:
+
+    # Ensure bgcflow_dir is a pathlib.PosixPath
+    if not isinstance(bgcflow_dir, Path):
         bgcflow_dir = Path(bgcflow_dir)
+
+    # Define paths and template dictionary
     global_config = bgcflow_dir / "config/config.yaml"
     template_dict = {
         "name": project_name,
@@ -84,16 +122,20 @@ def generate_project(
         "prokka-db": "OPTIONAL: relative path to your `prokka-db.csv`",
         "gtdb-tax": "OPTIONAL: relative path to your `gtdbtk.bac120.summary.tsv`",
     }
+
+    # Update template_dict with project rules if enabled
     if use_project_rules:
         with open(bgcflow_dir / "workflow/rules.yaml", "r") as file:
-            available_rules = yaml.safeload(file)
+            available_rules = yaml.safe_load(file)
             available_rules = {rule: "FALSE" for rule in available_rules.keys()}
             template_dict["rules"] = available_rules
 
+    # Create project directory
     project_dir = bgcflow_dir / f"config/{project_name}"
     project_dir.mkdir(parents=True, exist_ok=True)
 
-    if type(samples_csv) == pd.core.frame.DataFrame:
+    # Handle samples_csv input
+    if isinstance(samples_csv, pd.core.frame.DataFrame):
         print("Generating samples file from Pandas DataFrame")
         assert samples_csv.index.name == "genome_id"
         assert (
@@ -108,47 +150,53 @@ def generate_project(
             ]
         ).all
         samples_csv.to_csv(project_dir / "samples.csv")
-    elif type(samples_csv) == str:
+    elif isinstance(samples_csv, str):
         print(f"Copying samples file from {samples_csv}")
         samples_csv = Path(samples_csv)
         assert samples_csv.is_file()
         shutil.copy(samples_csv, project_dir / "samples.csv")
 
-    if type(prokka_db) == str:
+    # Handle prokka_db input
+    if isinstance(prokka_db, str):
         print(f"Copying custom annotation file from {prokka_db}")
         prokka_db = Path(prokka_db)
         assert prokka_db.is_file()
         shutil.copy(prokka_db, project_dir / "prokka-db.csv")
         template_dict["prokka-db"] = "prokka-db.csv"
 
-    if type(gtdb_tax) == str:
+    # Handle gtdb_tax input
+    if isinstance(gtdb_tax, str):
         print(f"Copying custom taxonomy from {gtdb_tax}")
         gtdb_tax = Path(gtdb_tax)
         assert gtdb_tax.is_file()
         shutil.copy(gtdb_tax, project_dir / "gtdbtk.bac120.summary.tsv")
         template_dict["gtdb-tax"] = "gtdbtk.bac120.summary.tsv"
 
-    if type(description) == str:
+    # Update template_dict with project description
+    if isinstance(description, str):
         print("Writing project description...")
         template_dict["description"] = description
 
+    # Generate project configuration file
     print(f"Project config file generated in: {project_dir}")
     with open(project_dir / "project_config.yaml", "w") as file:
         yaml.dump(template_dict, file, sort_keys=False)
 
+    # Initialize global config if not present
     if not global_config.is_file():
         bgcflow_init(bgcflow_dir, global_config)
 
+    # Update global config.yaml with project information
     with open(bgcflow_dir / "config/config.yaml", "r") as file:
         print("Updating global config.yaml")
         main_config = yaml.safe_load(file)
 
-        # mask pep and name as alias
+        # Rename 'pep' to 'name' for consistency
         for item in main_config["projects"]:
             if "pep" in item:
                 item["name"] = item.pop("pep")
 
-        # mask rules and pipelines as alias
+        # Rename 'pipelines' to 'rules'
         if "pipelines" in main_config.keys():
             main_config["rules"] = main_config.pop("pipelines")
 
@@ -163,9 +211,9 @@ def generate_project(
             {"name": str(project_dir / "project_config.yaml")}
         )
 
+    # Update and save global config
     with open(bgcflow_dir / "config/config.yaml", "w") as file:
         yaml.dump(main_config, file, sort_keys=False)
-
     return
 
 
@@ -193,6 +241,23 @@ def projects_util(**kwargs):
 
 
 def copy_final_output(**kwargs):
+    """
+    Copy final project output files to a specified destination.
+
+    This function facilitates the copying of processed project output files to a designated destination. It can
+    also preserve symbolic links during the copy process if specified. Excludes specific cache directories from
+    being copied.
+
+    Parameters:
+        **kwargs (dict): A dictionary containing the following keys:
+            - bgcflow_dir (str): The directory where the BGCFlow configuration is located.
+            - project (str): The name of the project whose output should be copied.
+            - copy_links (bool, optional): Flag to indicate whether to preserve symbolic links. Defaults to False.
+            - copy (str): The destination directory where the output should be copied.
+
+    Returns:
+        None
+    """
     bgcflow_dir = Path(kwargs["bgcflow_dir"]).resolve()
     project_output = bgcflow_dir / f"data/processed/{kwargs['project']}"
     assert (
