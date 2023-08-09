@@ -1,4 +1,5 @@
 import json
+import logging
 import shutil
 import subprocess
 from pathlib import Path, PosixPath
@@ -6,6 +7,9 @@ from pathlib import Path, PosixPath
 import pandas as pd
 import peppy
 import yaml
+
+# Set the logging level to INFO to suppress debug messages
+logging.basicConfig(level=logging.INFO)
 
 
 def generate_global_config(bgcflow_dir, global_config):
@@ -54,6 +58,8 @@ def bgcflow_init(bgcflow_dir, global_config):
             project_names = [p for p in config_yaml["projects"]]
             list_of_projects = {}
             for p in project_names:
+                if "pep" in p.keys():
+                    p["name"] = p.pop("pep")
                 if p["name"].endswith(".yaml"):
                     pep = peppy.Project(
                         str(bgcflow_dir / p["name"]), sample_table_index="genome_id"
