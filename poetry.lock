@@ -1879,13 +1879,13 @@ files = [
 
 [[package]]
 name = "panoptes-ui"
-version = "0.2.2"
+version = "0.2.3"
 description = "panoptes: monitor computational workflows in real time"
 optional = false
 python-versions = "*"
 files = [
-    {file = "panoptes-ui-0.2.2.tar.gz", hash = "sha256:cc4f26cc436bb279af17405545a3c4f8dc4557a98b1384db6053675aabc60018"},
-    {file = "panoptes_ui-0.2.2-py3-none-any.whl", hash = "sha256:c4971ae1c71c0ab9d94f5aab2247d96da58a7bd3caec6fce152f122b8a0db7eb"},
+    {file = "panoptes-ui-0.2.3.tar.gz", hash = "sha256:5fa903711786d68fb014e0015d647dd56b80b844fa2d6520554487663e45635d"},
+    {file = "panoptes_ui-0.2.3-py3-none-any.whl", hash = "sha256:7928da4e1697e4a167f4e6dffa744bdf41448bc87c7f648f02d813711dd43bb9"},
 ]
 
 [package.dependencies]
@@ -2824,19 +2824,18 @@ all = ["jinja2", "packaging", "pandas", "pygithub", "pyyaml", "requests", "reret
 
 [[package]]
 name = "snakemake"
-version = "7.32.2"
+version = "7.32.3"
 description = "Workflow management system to create reproducible and scalable data analyses"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "snakemake-7.32.2-py3-none-any.whl", hash = "sha256:43654368991040b0e796417b3720668da8d955386ae8fe20b451b7d35e0d3ee1"},
-    {file = "snakemake-7.32.2.tar.gz", hash = "sha256:902dca1e50d8ea16be3a2ecf314259e3157e9fd619c8dcd7cd166aeb12336718"},
+    {file = "snakemake-7.32.3.tar.gz", hash = "sha256:cbe586fe28349982307f008ca40e839d569cf5d540008b0c91ebfef689b49b18"},
 ]
 
 [package.dependencies]
 appdirs = "*"
 configargparse = "*"
-connection-pool = ">=0.0.3"
+connection_pool = ">=0.0.3"
 datrie = "*"
 docutils = "*"
 gitpython = "*"
@@ -2850,7 +2849,7 @@ pulp = ">=2.0"
 pyyaml = "*"
 requests = "*"
 reretry = "*"
-smart-open = ">=3.0"
+smart_open = ">=3.0"
 stopit = "*"
 tabulate = "*"
 throttler = "*"
@@ -3086,13 +3085,13 @@ files = [
 
 [[package]]
 name = "tox"
-version = "4.6.4"
+version = "4.7.0"
 description = "tox is a generic virtualenv management and test command line tool"
 optional = true
 python-versions = ">=3.7"
 files = [
-    {file = "tox-4.6.4-py3-none-any.whl", hash = "sha256:1b8f8ae08d6a5475cad9d508236c51ea060620126fd7c3c513d0f5c7f29cc776"},
-    {file = "tox-4.6.4.tar.gz", hash = "sha256:5e2ad8845764706170d3dcaac171704513cc8a725655219acb62fe4380bdadda"},
+    {file = "tox-4.7.0-py3-none-any.whl", hash = "sha256:79399a3d4641d1fd15eb6bd62c2f35923988038bf0ecf37a688b5e7a767de7d7"},
+    {file = "tox-4.7.0.tar.gz", hash = "sha256:89120e1568c763924301cfde61ba7d4b5c4615eeb1086d5370deb03e9cf63c41"},
 ]
 
 [package.dependencies]
@@ -3101,32 +3100,32 @@ chardet = ">=5.1"
 colorama = ">=0.4.6"
 filelock = ">=3.12.2"
 packaging = ">=23.1"
-platformdirs = ">=3.8"
+platformdirs = ">=3.9.1"
 pluggy = ">=1.2"
-pyproject-api = ">=1.5.2"
+pyproject-api = ">=1.5.3"
 tomli = {version = ">=2.0.1", markers = "python_version < \"3.11\""}
-virtualenv = ">=20.23.1"
+virtualenv = ">=20.24.1"
 
 [package.extras]
 docs = ["furo (>=2023.5.20)", "sphinx (>=7.0.1)", "sphinx-argparse-cli (>=1.11.1)", "sphinx-autodoc-typehints (>=1.23.3,!=1.23.4)", "sphinx-copybutton (>=0.5.2)", "sphinx-inline-tabs (>=2023.4.21)", "sphinxcontrib-towncrier (>=0.2.1a0)", "towncrier (>=23.6)"]
-testing = ["build[virtualenv] (>=0.10)", "covdefaults (>=2.3)", "detect-test-pollution (>=1.1.1)", "devpi-process (>=0.3.1)", "diff-cover (>=7.6)", "distlib (>=0.3.6)", "flaky (>=3.7)", "hatch-vcs (>=0.3)", "hatchling (>=1.17.1)", "psutil (>=5.9.5)", "pytest (>=7.4)", "pytest-cov (>=4.1)", "pytest-mock (>=3.11.1)", "pytest-xdist (>=3.3.1)", "re-assert (>=1.1)", "time-machine (>=2.10)", "wheel (>=0.40)"]
+testing = ["build[virtualenv] (>=0.10)", "covdefaults (>=2.3)", "detect-test-pollution (>=1.1.1)", "devpi-process (>=0.3.1)", "diff-cover (>=7.7)", "distlib (>=0.3.7)", "flaky (>=3.7)", "hatch-vcs (>=0.3)", "hatchling (>=1.17.1)", "psutil (>=5.9.5)", "pytest (>=7.4)", "pytest-cov (>=4.1)", "pytest-mock (>=3.11.1)", "pytest-xdist (>=3.3.1)", "re-assert (>=1.1)", "time-machine (>=2.10)", "wheel (>=0.40)"]
 
 [[package]]
 name = "tqdm"
-version = "4.65.0"
+version = "4.66.0"
 description = "Fast, Extensible Progress Meter"
 optional = true
 python-versions = ">=3.7"
 files = [
-    {file = "tqdm-4.65.0-py3-none-any.whl", hash = "sha256:c4f53a17fe37e132815abceec022631be8ffe1b9381c2e6e30aa70edc99e9671"},
-    {file = "tqdm-4.65.0.tar.gz", hash = "sha256:1871fb68a86b8fb3b59ca4cdd3dcccbc7e6d613eeed31f4c332531977b89beb5"},
+    {file = "tqdm-4.66.0-py3-none-any.whl", hash = "sha256:39d459c7140b7890174e69d4d68d6291bc774a55b4bc5d93c0b760798ac5a03e"},
+    {file = "tqdm-4.66.0.tar.gz", hash = "sha256:cc6e7e52202d894e66632c5c8a9330bd0e3ff35d2965c93ca832114a3d865362"},
 ]
 
 [package.dependencies]
 colorama = {version = "*", markers = "platform_system == \"Windows\""}
 
 [package.extras]
-dev = ["py-make (>=0.1.0)", "twine", "wheel"]
+dev = ["pytest (>=6)", "pytest-cov", "pytest-timeout", "pytest-xdist"]
 notebook = ["ipywidgets (>=6)"]
 slack = ["slack-sdk"]
 telegram = ["requests"]
@@ -3193,13 +3192,13 @@ files = [
 
 [[package]]
 name = "ubiquerg"
-version = "0.6.2"
+version = "0.6.3"
 description = "Various utility functions"
 optional = false
 python-versions = "*"
 files = [
-    {file = "ubiquerg-0.6.2-py2.py3-none-any.whl", hash = "sha256:6336c4dc2c64fd759585265ad0a307eb48944368de531fb686447d2a93a5779d"},
-    {file = "ubiquerg-0.6.2.tar.gz", hash = "sha256:a9b1388799d4c366f956e0c912819099ad8f6cd0e5d890923cdde197f80d14cf"},
+    {file = "ubiquerg-0.6.3-py2.py3-none-any.whl", hash = "sha256:f0974dec2877b79396256170a290abb3629e600d01a178bc7e706e8eec6cc4d7"},
+    {file = "ubiquerg-0.6.3.tar.gz", hash = "sha256:025509c4ec77a5cde8e8be66dabfef2ca6e3cd99da3cb15066c66a6f2bc3b9b5"},
 ]
 
 [[package]]
@@ -3457,4 +3456,4 @@ test = ["black", "flake8", "flake8-docstrings", "isort", "pytest", "pytest-cov"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<4.0"
-content-hash = "31ef39a4efc997c53bfe0d6545c3bc61ea832097bf17f9bb7b814bf2d3c79d9c"
+content-hash = "01f8841b190e9c46ea9045fe7edb128679c91590ab65bbcf779d4053b92f1f96"
