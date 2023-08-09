@@ -13,18 +13,32 @@ from snakedeploy.deploy import deploy as dplyr
 
 
 def snakemake_wrapper(**kwargs):
+    """
+    Wrapper function for running Snakemake with BGCFlow.
 
+    Parameters:
+    **kwargs (dict): Keyword arguments for Snakemake and BGCFlow.
+
+    Returns:
+    None
+    """
     p = "Empty process catcher"
 
     dryrun = ""
     touch = ""
+    unlock = ""
+    until = ""
 
     if kwargs["dryrun"]:
         dryrun = "--dryrun"
     if kwargs["touch"]:
         touch = "--touch"
+    if kwargs["unlock"]:
+        touch = "--unlock"
+    if kwargs["until"] is not None:
+        until = f"--until {kwargs['until']}"
 
-    # run panoptes if not yet run
+    # Run Panoptes if not yet run
     port = int(kwargs["wms_monitor"].split(":")[-1])
 
     try:
@@ -41,7 +55,7 @@ def snakemake_wrapper(**kwargs):
         )
         click.echo(f"Panoptes job id: {p.pid}")
 
-    # run snakemake
+    # Connect to Panoptes
     click.echo("Connecting to Panoptes...")
     ctr = 1
     for tries in range(10):
@@ -59,10 +73,29 @@ def snakemake_wrapper(**kwargs):
         else:
             time.sleep(1)
 
-    # run snakemake
-    snakemake_command = f"cd {kwargs['bgcflow_dir']} && snakemake --snakefile {kwargs['snakefile']} --use-conda --keep-going --rerun-incomplete --rerun-triggers mtime -c {kwargs['cores']} {dryrun} {touch} --wms-monitor {kwargs['wms_monitor']}"
+    # Check Snakefile
+    valid_workflows = {"Snakefile" : "Main BGCFlow snakefile for genome mining", 
+                        "BGC" : "Subworkflow for comparative analysis of BGCs", 
+                        "Report" : "Build a report for a BGCFlow run", 
+                        "Database" : "Build a database for a BGCFlow run", 
+                        "Metabase" : "Run a metabase server"}
+
+    bgcflow_dir = Path(kwargs["bgcflow_dir"])
+    if kwargs["workflow"] in ["workflow/Snakefile", "workflow/BGC", "workflow/Report", "workflow/Database", "workflow/Metabase"]:
+        snakefile = bgcflow_dir / kwargs["workflow"]
+    elif kwargs["workflow"] in ["Snakefile", "BGC", "Report", "Database", "Metabase"]:
+        snakefile = bgcflow_dir / f'workflow/{kwargs["workflow"]}'
+    else:
+        snakefile = bgcflow_dir / kwargs["workflow"]
+
+    assert snakefile.is_file(), f"Snakefile {snakefile} does not exist. Available workflows are:\n" + "\n".join([f" - {k}: {v}" for k, v in valid_workflows.items()])
+
+    # Run Snakemake
+    snakemake_command = f"cd {kwargs['bgcflow_dir']} && snakemake --snakefile {snakefile} --use-conda --keep-going --rerun-incomplete --rerun-triggers mtime -c {kwargs['cores']} {dryrun} {touch} {until} {unlock} --wms-monitor {kwargs['wms_monitor']}"
     click.echo(snakemake_command)
     subprocess.call(snakemake_command, shell=True)
+    
+    # Kill Panoptes
     try:
         if not type(p) == str:
             click.echo(f"Killing panoptes: PID {p.pid}")
@@ -73,17 +106,35 @@ def snakemake_wrapper(**kwargs):
 
 
 def deployer(**kwargs):
+    """
+    Deploy the BGCFlow repository to a specified destination using Snakedeploy.
+
+    Parameters:
+    **kwargs (dict): Keyword arguments for the deployment.
+
+    Returns:
+    None
+    """
     dplyr(
         "https://github.com/NBChub/bgcflow.git",
         branch=kwargs["branch"],
         name="bgcflow",
         dest_path=Path(kwargs["destination"]),
-        tag="v0.5.2-alpha",
+        tag=kwargs["tag"],
     )
     return
 
 
 def cloner(**kwargs):
+    """
+    Clone the BGCFlow repository to a specified destination.
+
+    Parameters:
+    **kwargs (dict): Keyword arguments for the cloning.
+
+    Returns:
+    None
+    """
     destination_dir = Path(kwargs["destination"])
     click.echo(f"Cloning BGCFlow to {destination_dir}...")
     destination_dir.mkdir(parents=True, exist_ok=True)
@@ -101,7 +152,15 @@ def cloner(**kwargs):
 
 
 def get_all_rules(**kwargs):
+    """
+    Print information about available rules in the BGCFlow repository.
 
+    Parameters:
+    **kwargs (dict): Keyword arguments for the function.
+
+    Returns:
+    None
+    """
     path = Path(kwargs["bgcflow_dir"])
     rule_file = path / "workflow/rules.yaml"
 
