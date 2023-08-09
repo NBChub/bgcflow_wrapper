@@ -74,27 +74,39 @@ def snakemake_wrapper(**kwargs):
             time.sleep(1)
 
     # Check Snakefile
-    valid_workflows = {"Snakefile" : "Main BGCFlow snakefile for genome mining", 
-                        "BGC" : "Subworkflow for comparative analysis of BGCs", 
-                        "Report" : "Build a report for a BGCFlow run", 
-                        "Database" : "Build a database for a BGCFlow run", 
-                        "Metabase" : "Run a metabase server"}
+    valid_workflows = {
+        "Snakefile": "Main BGCFlow snakefile for genome mining",
+        "BGC": "Subworkflow for comparative analysis of BGCs",
+        "Report": "Build a report for a BGCFlow run",
+        "Database": "Build a database for a BGCFlow run",
+        "Metabase": "Run a metabase server",
+    }
 
     bgcflow_dir = Path(kwargs["bgcflow_dir"])
-    if kwargs["workflow"] in ["workflow/Snakefile", "workflow/BGC", "workflow/Report", "workflow/Database", "workflow/Metabase"]:
+    if kwargs["workflow"] in [
+        "workflow/Snakefile",
+        "workflow/BGC",
+        "workflow/Report",
+        "workflow/Database",
+        "workflow/Metabase",
+    ]:
         snakefile = bgcflow_dir / kwargs["workflow"]
     elif kwargs["workflow"] in ["Snakefile", "BGC", "Report", "Database", "Metabase"]:
         snakefile = bgcflow_dir / f'workflow/{kwargs["workflow"]}'
     else:
         snakefile = bgcflow_dir / kwargs["workflow"]
 
-    assert snakefile.is_file(), f"Snakefile {snakefile} does not exist. Available workflows are:\n" + "\n".join([f" - {k}: {v}" for k, v in valid_workflows.items()])
+    assert (
+        snakefile.is_file()
+    ), f"Snakefile {snakefile} does not exist. Available workflows are:\n" + "\n".join(
+        [f" - {k}: {v}" for k, v in valid_workflows.items()]
+    )
 
     # Run Snakemake
     snakemake_command = f"cd {kwargs['bgcflow_dir']} && snakemake --snakefile {snakefile} --use-conda --keep-going --rerun-incomplete --rerun-triggers mtime -c {kwargs['cores']} {dryrun} {touch} {until} {unlock} --wms-monitor {kwargs['wms_monitor']}"
     click.echo(snakemake_command)
     subprocess.call(snakemake_command, shell=True)
-    
+
     # Kill Panoptes
     try:
         if not type(p) == str:
