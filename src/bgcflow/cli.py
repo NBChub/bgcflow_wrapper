@@ -224,20 +224,31 @@ def serve(**kwargs):
         click.echo(
             "\n - Use bgcflow serve --project <PROJECT_NAME> to serve a specific project report."
         )
-        click.echo(" - Available projects:")
-        global_config = Path(kwargs["bgcflow_dir"]) / "config/config.yaml"
+        bgcflow_dir = Path(kwargs["bgcflow_dir"])
+        global_config = bgcflow_dir / "config/config.yaml"
         if global_config.is_file():
             # grab available projects
             with open(global_config, "r") as file:
                 config_yaml = yaml.safe_load(file)
                 project_names = [p for p in config_yaml["projects"]]
+                available_projects = []
                 for p in project_names:
                     if "pep" in p.keys():
                         p["name"] = p.pop("pep")
                     if p["name"].endswith(".yaml") or p["name"].endswith(".yml"):
-                        with open(p["name"], "r") as pep_file:
+                        with open(bgcflow_dir / p["name"], "r") as pep_file:
                             pep_yaml = yaml.safe_load(pep_file)
-                            click.echo(f'    - {pep_yaml["name"]}')
+                            available_projects.append(pep_yaml["name"])
+            if available_projects == []:
+                click.echo(" - No projects found.")
+            else:
+                click.echo(" - Available projects:")
+                for project_name in available_projects:
+                    click.echo(f"    - {project_name}")
+        else:
+            click.echo(
+                "    - Unable to find global config file. Use --bgcflow_dir to set the right location."
+            )
         click.echo("\n - Use bgcflow serve -h, --help for more information.")
 
     # PROJECT SNAKEMAKE_REPORT
@@ -269,7 +280,16 @@ def serve(**kwargs):
     else:
         bgcflow_dir = kwargs["bgcflow_dir"]
         project_name = kwargs["project"]
-        port_id = kwargs["port"]
+
+        # Define a list of disallowed project names
+        disallowed_projects = ["metabase"]
+
+        # Check if the project name is not in the list of disallowed project names
+        assert (
+            project_name not in disallowed_projects
+        ), f"ERROR: Project name '{project_name}' is not allowed."
+
+        port_id = kwargs["port_markdown"]
         file_server = kwargs["file_server"]
         generate_mkdocs_report(
             bgcflow_dir, project_name, port_id, file_server, ipynb=False
