@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 import click
+import yaml
 
 import bgcflow
 from bgcflow.bgcflow import cloner, deployer, get_all_rules, snakemake_wrapper
@@ -131,7 +132,7 @@ def pipelines(**kwargs):
 )
 def init(**kwargs):
     """
-    Create projects or initiate BGCFlow config. Use --project to create a new BGCFlow project.
+    Create projects or initiate BGCFlow config from template. Use --project to create a new BGCFlow project.
 
     Usage:
     bgcflow init --> check current directory for existing config dir. If not found, generate from template.
@@ -202,9 +203,26 @@ def serve(**kwargs):
             shell=True,
         )
     elif kwargs["project"] is None:
+        click.echo(" - Use bgcflow serve --metabase to start a metabase server.")
         click.echo(
-            "Use `bgcflow serve --project <project name>` to generate report for each project.\nTo see Snakemake run summary, use `bgcflow serve --project snakemake_report`."
+            "\n - Use bgcflow serve --project <PROJECT_NAME> to serve a specific project report."
         )
+        click.echo(" - Available projects:")
+        global_config = Path(kwargs["bgcflow_dir"]) / "config/config.yaml"
+        if global_config.is_file():
+            # grab available projects
+            with open(global_config, "r") as file:
+                config_yaml = yaml.safe_load(file)
+                project_names = [p for p in config_yaml["projects"]]
+                for p in project_names:
+                    if "pep" in p.keys():
+                        p["name"] = p.pop("pep")
+                    if p["name"].endswith(".yaml") or p["name"].endswith(".yml"):
+                        with open(p["name"], "r") as pep_file:
+                            pep_yaml = yaml.safe_load(pep_file)
+                            click.echo(f'    - {pep_yaml["name"]}')
+        click.echo("\n - Use bgcflow serve -h, --help for more information.")
+
     elif kwargs["project"] == "snakemake_report":
         output_dir = Path(kwargs["bgcflow_dir"]) / "data"
         assert (
@@ -250,18 +268,28 @@ def serve(**kwargs):
     help="Use at most N CPU cores/jobs in parallel. (DEFAULT: 8)",
 )
 @click.option("-n", "--dryrun", is_flag=True, help="Test run.")
+@click.argument("build_type", type=click.Choice(["report", "database"]))
 @main.command()
-def build(**kwargs):
+def build(build_type, **kwargs):
     """
-    Use DBT to build DuckDB database from BGCFlow results.
+    Build Markdown report or use dbt to build DuckDB database.
+
+    bgcflow build "report" will generate a Markdown report from the Jupyter notebook.
+
+    bgcflow build "database" will use dbt to build a DuckDB database from the BGCFlow results.
     """
     dryrun = ""
     bgcflow_dir = Path(kwargs["bgcflow_dir"])
     if kwargs["dryrun"]:
         dryrun = "--dryrun"
 
+    if build_type == "report":
+        snakefile = "workflow/Report"
+    elif build_type == "database":
+        snakefile = "workflow/Database"
+
     subprocess.call(
-        f"cd {bgcflow_dir.resolve()} && snakemake --use-conda -c {kwargs['cores']} --snakefile workflow/Database --keep-going {dryrun}",
+        f"cd {bgcflow_dir.resolve()} && snakemake --use-conda -c {kwargs['cores']} --snakefile {snakefile} --keep-going {dryrun}",
         shell=True,
     )
 
