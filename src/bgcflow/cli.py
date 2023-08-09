@@ -60,7 +60,7 @@ def clone(**kwargs):
     help="Location of BGCFlow directory. (DEFAULT: Current working directory.)",
 )
 @click.option(
-    "--snakefile",
+    "--workflow",
     default="workflow/Snakefile",
     help="Location of the Snakefile relative to BGCFlow directory. (DEFAULT: workflow/Snakefile)",
 )
@@ -76,6 +76,14 @@ def clone(**kwargs):
     help="Use at most N CPU cores/jobs in parallel. (DEFAULT: 8)",
 )
 @click.option("-n", "--dryrun", is_flag=True, help="Test run.")
+@click.option(
+    "--unlock", is_flag=True, help="Remove a lock on the snakemake working directory."
+)
+@click.option(
+    "--until",
+    default=None,
+    help="Runs the pipeline until it reaches the specified rules or files.",
+)
 @click.option(
     "-t",
     "--touch",
