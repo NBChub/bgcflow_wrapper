@@ -62,7 +62,7 @@ def clone(**kwargs):
 @click.option(
     "--workflow",
     default="workflow/Snakefile",
-    help="Location of the Snakefile relative to BGCFlow directory. (DEFAULT: workflow/Snakefile)",
+    help="Select which snakefile to run. Available subworkflows: {BGC|Database|Report|Metabase}. (DEFAULT: workflow/Snakefile)",
 )
 @click.option(
     "--wms-monitor",
