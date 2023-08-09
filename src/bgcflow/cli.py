@@ -175,7 +175,9 @@ def get_result(**kwargs):
 
 
 @main.command()
-@click.option("--port", default=8001, help="Port to use. (DEFAULT: 8001)")
+@click.option("--port_markdown", default=8001, help="Port to use. (DEFAULT: 8001)")
+# @click.option("--port_metabase", default=3000, help="Port to use. (DEFAULT: 8001)")
+@click.option("--port_panoptes", default=5000, help="Port to use. (DEFAULT: 8001)")
 @click.option(
     "--file_server",
     default="http://localhost:8002",
@@ -191,17 +193,32 @@ def get_result(**kwargs):
     is_flag=True,
     help="Run Metabase server at http://localhost:3000. Requires Java to be installed. See: https://www.metabase.com/docs/latest/installation-and-operation/java-versions",
 )
+@click.option(
+    "--panoptes",
+    is_flag=True,
+    help="Run Panoptes server to monitor workflow at http://localhost:5000",
+)
 @click.option("--project", help="Name of the project. (DEFAULT: all)")
 def serve(**kwargs):
     """
     Serve static HTML report or other utilities (Metabase, etc.).
     """
     workflow_dir = Path(kwargs["bgcflow_dir"]) / "workflow"
+
+    # METABASE
     if kwargs["metabase"]:
         subprocess.call(
             f"(cd {workflow_dir.parent.resolve()} && snakemake --snakefile workflow/Metabase -c 1)",
             shell=True,
         )
+
+    # PANOPTES
+    if kwargs["panoptes"]:
+        subprocess.call(
+            f"(cd {workflow_dir.parent.resolve()} && panoptes --port {kwargs['port_panoptes']})",
+            shell=True,
+        )
+    # PROJECT DEFAULT
     elif kwargs["project"] is None:
         click.echo(" - Use bgcflow serve --metabase to start a metabase server.")
         click.echo(
@@ -223,6 +240,7 @@ def serve(**kwargs):
                             click.echo(f'    - {pep_yaml["name"]}')
         click.echo("\n - Use bgcflow serve -h, --help for more information.")
 
+    # PROJECT SNAKEMAKE_REPORT
     elif kwargs["project"] == "snakemake_report":
         output_dir = Path(kwargs["bgcflow_dir"]) / "data"
         assert (
@@ -246,6 +264,8 @@ def serve(**kwargs):
                 str(kwargs["port"]),
             ]
         )
+
+    # PROJECT MKDOCS_REPORT
     else:
         bgcflow_dir = kwargs["bgcflow_dir"]
         project_name = kwargs["project"]
