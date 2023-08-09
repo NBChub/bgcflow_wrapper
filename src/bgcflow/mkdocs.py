@@ -73,11 +73,21 @@ def generate_mkdocs_report(
         extension = "ipynb"
     else:
         extension = "md"
-    for r in p.rule_used.keys():
+
+    report_category_containers = {}
+    for r, v in p.rule_used.items():
         jupyter_template = report_dir / f"docs/{r}.{extension}"
         # logging.debug(jupyter_template.is_file()) # TO DO ASSERT IPYNB FILES, THEY SHOULD BE IN THE DOCS
         logging.debug(f"Adding report [{r} : {jupyter_template.name}]")
-        mkdocs_template["nav"].append({r: jupyter_template.name})
+        report_category = v["category"]
+        if report_category not in report_category_containers.keys():
+            report_category_containers[report_category] = []
+        report_category_containers[report_category].append({r: jupyter_template.name})
+
+    for k, v in report_category_containers.items():
+        mkdocs_template["nav"].append({k: v})
+
+    print(mkdocs_template["nav"])
     with open(report_dir / "mkdocs.yml", "w") as f:
         yaml.dump(mkdocs_template, f)
 
