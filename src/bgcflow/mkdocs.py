@@ -17,12 +17,44 @@ logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
 
 
 class Dict2Class(object):
-    def __init__(self, my_dict):
+    """
+    A class that converts a dictionary to an object with attributes.
 
+    Parameters:
+    -----------
+    my_dict : dict
+        The dictionary to convert to an object.
+
+    Attributes:
+    -----------
+    All keys in the dictionary are converted to attributes of the object.
+
+    Methods:
+    --------
+    print_references():
+        Returns a formatted string of the `references` attribute of the object.
+    """
+    def __init__(self, my_dict):
+        """
+        Initializes the object with attributes from the dictionary.
+
+        Parameters:
+        -----------
+        my_dict : dict
+            The dictionary to convert to an object.
+        """
         for key in my_dict:
             setattr(self, key, my_dict[key])
 
     def print_references(self):
+        """
+        Returns a formatted string of the `references` attribute of the object.
+
+        Returns:
+        --------
+        str:
+            A formatted string of the `references` attribute of the object.
+        """
         text = ""
         for r in self.references:
             text = "\n".join([text, f"- {r}"])
@@ -30,6 +62,19 @@ class Dict2Class(object):
 
 
 def load_project_metadata(path_to_metadata):
+    """
+    Loads project metadata from a JSON file and returns it as an object.
+
+    Parameters:
+    -----------
+    path_to_metadata : str or Path
+        The path to the JSON file containing the project metadata.
+
+    Returns:
+    --------
+    Dict2Class:
+        An object representing the project metadata.
+    """
     with open(path_to_metadata, "r") as f:
         project_metadata = json.load(f)
         p = list(project_metadata.values())[0]
@@ -37,10 +82,69 @@ def load_project_metadata(path_to_metadata):
         p = Dict2Class(p)
     return p
 
+def write_mkdocs_file(data_input, output_file, action):
+    """
+    Writes data to a file in either YAML or plain text format.
+
+    Parameters:
+    -----------
+    data_input : dict or str
+        The data to write to the file.
+    output_file : str or Path
+        The path to the file to write.
+    action : str
+        The action to perform. Either "yaml" to write the data in YAML format, or "write" to write the data as plain text.
+
+    Returns:
+    --------
+    None
+    """
+    if output_file.exists():
+        overwrite = input(f"WARNING: {output_file} already exists. Do you want to overwrite it? (y/n) ")
+        if overwrite.lower() != "y":
+            print("Skipping file write.")
+        else:
+            # continue with writing the file
+            with open(output_file, "w", encoding="utf-8") as f:
+                if action == "yaml":
+                    yaml.dump(data_input, f)
+                elif action == "write":
+                    f.write(data_input)
+    else:
+        # continue with writing the file
+        with open(output_file, "w", encoding="utf-8") as f:
+            if action == "yaml":
+                  yaml.dump(data_input, f)
+            elif action == "write":
+                f.write(data_input)
 
 def generate_mkdocs_report(
-    bgcflow_dir, project_name, port=8001, fileserver="http://localhost:8002", ipynb=True
-):
+    bgcflow_dir: str,
+    project_name: str,
+    port: int = 8001,
+    fileserver: str = "http://localhost:8002",
+    ipynb: bool = True
+) -> None:
+    """
+    Generates an MkDocs report for a BGCFlow project.
+
+    Parameters:
+    -----------
+    bgcflow_dir : str
+        The path to the BGCFlow project directory.
+    project_name : str
+        The name of the BGCFlow project.
+    port : int, optional
+        The port number to use for the MkDocs server, by default 8001.
+    fileserver : str, optional
+        The URL of the file server to use, by default "http://localhost:8002".
+    ipynb : bool, optional
+        Whether to use IPython notebooks for the reports, by default True.
+
+    Returns:
+    --------
+    None
+    """
     logging.info("Checking input folder..")
 
     # is it a bgcflow data directory or just a result directory?
@@ -68,7 +172,7 @@ def generate_mkdocs_report(
     df_results = pd.DataFrame.from_dict(p.rule_used).T
 
     # check available reports
-    logging.info(f"Generating mkdocs config at: {report_dir / 'mkdocs.yml'}")
+    logging.info("Preparing mkdocs config...")
     if ipynb:
         extension = "ipynb"
     else:
@@ -87,14 +191,16 @@ def generate_mkdocs_report(
     for k, v in report_category_containers.items():
         mkdocs_template["nav"].append({k: v})
 
-    print(mkdocs_template["nav"])
-    with open(report_dir / "mkdocs.yml", "w") as f:
-        yaml.dump(mkdocs_template, f)
+    # write mkdocs template
+    mkdocs_yml = report_dir / "mkdocs.yml"
+    logging.info(f"Generating mkdocs config at: {mkdocs_yml}")
+    write_mkdocs_file(mkdocs_template, mkdocs_yml, "yaml")
 
     # Generate index.md
     docs_dir = report_dir / "docs"
     docs_dir.mkdir(exist_ok=True, parents=True)
-    logging.info(f"Generating homepage at: {docs_dir / 'index.md'}")
+    mkdocs_index = docs_dir / "index.md"
+    logging.info(f"Generating homepage at: {mkdocs_index}")
     df_results.loc[:, "BGCFlow_rules"] = df_results.index
     df_results = df_results.loc[:, ["BGCFlow_rules", "description"]].reset_index(
         drop=True
@@ -110,14 +216,14 @@ def generate_mkdocs_report(
         "rule_table": df_results.to_markdown(index=False),
     }
     j2_template = Template(index_template)
-    with open(docs_dir / "index.md", "w", encoding="utf-8") as f:
-        f.write(j2_template.render(data))
+
+    write_mkdocs_file(j2_template.render(data), mkdocs_index, "write")
 
     # generate main.py macros
-    logging.info(f"Generating python macros at: {report_dir / 'main.py'}")
+    mkdocs_py = report_dir / "main.py"
+    logging.info(f"Generating python macros at: {mkdocs_py}")
     j2_template = Template(macros_template)
-    with open(report_dir / "main.py", "w") as f:
-        f.write(j2_template.render({"file_server": fileserver}))
+    write_mkdocs_file(j2_template.render({"file_server": fileserver}), mkdocs_py, "write")
 
     # generate custom javascripts
     # script_dir = docs_dir / "scripts"
@@ -191,6 +297,20 @@ def generate_mkdocs_report(
 
 
 def signal_handler(signal, frame):
+    """
+    A signal handler function that prints a message and exits the program.
+
+    Parameters:
+    -----------
+    signal : int
+        The signal number.
+    frame : FrameType
+        The current stack frame.
+
+    Returns:
+    --------
+    None
+    """
     print("\nThank you for using BGCFlow Report!")
     # with open('bgcflow_wrapper.log', "r") as f:
     #    log_port = json.load(f)
@@ -295,6 +415,7 @@ mkdocs_template = {
 macros_template = """
 import json
 import pandas as pd
+from pathlib import Path
 
 class Dict2Class(object):
 
@@ -312,12 +433,23 @@ class Dict2Class(object):
     def file_server(self):
         return "{{ file_server }}"
 
+    def dependency_version(self):
+        dependency_versions_path = Path(__file__).parent / "metadata/dependency_versions.json"
+        if dependency_versions_path.is_file():
+            with open(dependency_versions_path, "r") as f:
+                dependency_versions = json.load(f)
+                return dependency_versions["antismash"]
+        else:
+            print("WARNING: Unable to find dependency_versions.json file. Are you using BGCFlow >= 0.7.1?")
+            print("WARNING: Assuming antismash version as 6.1.1")
+            return "6.1.1"
+
 def define_env(env):
   "Hook function"
 
   @env.macro
   def project():
-      with open("metadata/project_metadata.json", "r") as f:
+      with open(Path(__file__).parent / "metadata/project_metadata.json", "r") as f:
           project_metadata = json.load(f)
           p = list(project_metadata.values())[0]
           p['name'] = [i for i in project_metadata.keys()][0]
