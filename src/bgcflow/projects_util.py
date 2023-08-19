@@ -30,7 +30,35 @@ def generate_global_config(bgcflow_dir, global_config):
     assert (
         template_config.is_file()
     ), "Cannot find template file. Are you using BGCFlow version >= 0.4.1?"
+
     shutil.copy(template_config, global_config)
+
+    # scan for example projects
+    def copy_project_example(project_type):
+        """
+        Scan global config for example projects and (sub projects) and copy them to the config directory.
+        """
+        with open(global_config, "r") as file:
+            config_yaml = yaml.safe_load(file)
+        example_projects = [
+            Path(p["pep"])
+            for p in config_yaml[project_type]
+            if "pep" in p.keys() and p["pep"].endswith(".yaml")
+        ]
+
+        for example_project in example_projects:
+            example_project_dir = (
+                bgcflow_dir / ".examples" / example_project.parent.name
+            )
+            target_dir = bgcflow_dir / "config" / example_project_dir.name
+            if str(example_project).startswith(".examples"):
+                print(
+                    f"\n - WARNING: You are using BGCFlow version <= 0.7.1. In the global config file (`{global_config}`), please change the location of your `{example_project}` to `config/{example_project.parent.name}/{example_project.name}`."
+                )
+            shutil.copytree(example_project_dir, target_dir)
+
+    for project_type in ["projects", "bgc_projects"]:
+        copy_project_example(project_type)
     return
 
 
@@ -77,7 +105,7 @@ def bgcflow_init(bgcflow_dir, global_config):
     else:
         generate_global_config(bgcflow_dir, global_config)
 
-    print("Do a test run by: `bgcflow run -n`")
+    print("\nDo a test run by: `bgcflow run -n`")
 
     return
 
