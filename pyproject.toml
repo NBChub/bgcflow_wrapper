@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "bgcflow_wrapper"
-version = "0.2.7"
+version = "0.2.8"
 documentation = "https://nbchub.github.io/bgcflow_wrapper"
 repository = "https://github.com/NBChub/bgcflow_wrapper"
 description = "A snakemake wrapper and utility tools command line interface for BGCFlow."
