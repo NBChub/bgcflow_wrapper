@@ -399,7 +399,11 @@ def build(build_type, **kwargs):
     default=True,
     help="Use HTTP instead of HTTPS to connect to Metabase.",
 )
-@click.help_option("--help", "-h")
+@click.option(
+    "--dbt-excludes",
+    multiple=True,
+    help="A list of dbt models to exclude from the synchronization.",
+)
 @main.command()
 def sync(project_name, **kwargs):
     """
