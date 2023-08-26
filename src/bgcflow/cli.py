@@ -8,6 +8,7 @@ import yaml
 
 import bgcflow
 from bgcflow.bgcflow import cloner, deployer, get_all_rules, snakemake_wrapper
+from bgcflow.metabase import upload_and_sync_to_metabase
 from bgcflow.mkdocs import generate_mkdocs_report
 from bgcflow.projects_util import copy_final_output, projects_util
 
@@ -337,9 +338,74 @@ def build(build_type, **kwargs):
         snakefile = "workflow/Database"
 
     subprocess.call(
-        f"cd {bgcflow_dir.resolve()} && snakemake --use-conda -c {kwargs['cores']} --snakefile {snakefile} --keep-going {dryrun}",
+        f"cd {bgcflow_dir.resolve()} && snakemake --use-conda -c {kwargs['cores']} --snakefile {snakefile} --keep-going {dryrun} --rerun-incomplete",
         shell=True,
     )
+
+
+@click.argument("project-name", type=str)
+@click.option(
+    "--bgcflow-dir",
+    type=click.Path(exists=True, file_okay=False, dir_okay=True),
+    default=".",
+    help="The root directory of the BGCFlow project.",
+)
+@click.option(
+    "--dbt-dir",
+    type=click.Path(exists=True, file_okay=False, dir_okay=True),
+    default=None,
+    help="The directory containing the dbt project to upload. If None, the directory is inferred from the BGCFlow project directory.",
+)
+@click.option(
+    "--metabase-host",
+    type=str,
+    default="http://localhost:3000",
+    help="The URL of the Metabase server.",
+)
+@click.option(
+    "--mb-username",
+    type=str,
+    default=None,
+    help="The Metabase username. If None, the user will be prompted to enter their username.",
+)
+@click.option(
+    "--mb-password",
+    type=str,
+    default=None,
+    help="The Metabase password. If None, the user will be prompted to enter their password.",
+    hide_input=True,
+)
+@click.option(
+    "--dbt-schema",
+    type=str,
+    default="main",
+    help="The name of the dbt schema to use.",
+)
+@click.option(
+    "--metabase-database",
+    type=str,
+    default=None,
+    help="The name of the Metabase database to use.",
+)
+@click.option(
+    "--dbt-database",
+    type=str,
+    default="dbt_bgcflow",
+    help="The name of the dbt database to use.",
+)
+@click.option(
+    "--metabase-http",
+    is_flag=True,
+    default=True,
+    help="Use HTTP instead of HTTPS to connect to Metabase.",
+)
+@click.help_option("--help", "-h")
+@main.command()
+def sync(project_name, **kwargs):
+    """
+    Uploads and sync DuckDB database to Metabase.
+    """
+    upload_and_sync_to_metabase(project_name, **kwargs)
 
 
 if __name__ == "__main__":
