@@ -57,14 +57,15 @@ Options:
   -h, --help  Show this message and exit.
 
 Commands:
-  build       Use DBT to build DuckDB database from BGCFlow results.
+  build       Build Markdown report or use dbt to build DuckDB database.
   clone       Get a clone of BGCFlow to local directory.
   deploy      [EXPERIMENTAL] Deploy BGCFlow locally using snakedeploy.
   get-result  View a tree of a project results or get a copy using Rsync.
-  init        Create projects or initiate BGCFlow config.
+  init        Create projects or initiate BGCFlow config from template.
   pipelines   Get description of available pipelines from BGCFlow.
   run         A snakemake CLI wrapper to run BGCFlow.
   serve       Serve static HTML report or other utilities (Metabase, etc.).
+  sync        Upload and sync DuckDB database to Metabase.
 ```
 
 ## Credits

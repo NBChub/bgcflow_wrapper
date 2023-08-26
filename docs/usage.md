@@ -18,14 +18,15 @@ Options:
   -h, --help  Show this message and exit.
 
 Commands:
-  build       Use DBT to build DuckDB database from BGCFlow results.
+  build       Build Markdown report or use dbt to build DuckDB database.
   clone       Get a clone of BGCFlow to local directory.
   deploy      [EXPERIMENTAL] Deploy BGCFlow locally using snakedeploy.
   get-result  View a tree of a project results or get a copy using Rsync.
-  init        Create projects or initiate BGCFlow config.
+  init        Create projects or initiate BGCFlow config from template.
   pipelines   Get description of available pipelines from BGCFlow.
   run         A snakemake CLI wrapper to run BGCFlow.
   serve       Serve static HTML report or other utilities (Metabase, etc.).
+  sync        Uploads and sync DuckDB database to Metabase.
 ```
 
 ### Typical Usage
@@ -33,21 +34,53 @@ Commands:
 ```bash
 # get a clone of BGCFlow in your local machine
 bgcflow clone MY_BGCFLOW_PATH #change PATH accordingly
+cd MY_BGCFLOW_PATH
 ```
 
 - Then, initiate a project config by:
 ```bash
 # initiate an example config and projects from template
-bgcflow init --bgcflow_dir MY_BGCFLOW_PATH
+bgcflow init
 ```
->This will generate a file called `config.yaml` in the `config/` folder inside the cloned BGCFlow directory
+>This will generate a file called `config.yaml` in the `config/` folder inside the cloned BGCFlow directory with an example project
 
 - Once the config files are set, we can do a snakemake dry-run:
 ```bash
 # do a dry-run
-bgcflow run -n --bgcflow_dir MY_BGCFLOW_PATH
+bgcflow run -n
 ```
->While the workflow is running, the command automatically serve [`Panoptes-UI`](https://github.com/panoptes-organization/panoptes) at [`localhost:5000`](http://localhost:5000/)` to monitor jobs.
+> - While the workflow is running, the command automatically serve [`Panoptes-UI`](https://github.com/panoptes-organization/panoptes) at [`localhost:5000`](http://localhost:5000/)` to monitor jobs.
+> - If there is an instance of Panoptes already running in the designated port, the the run will use that instance instead. You can start panoptes manually by running `bgcflow serve --panoptes`
+
+- When all setting are correct, we can run the workflow:
+```bash
+bgcflow run
+```
+
+- Once the job is completed, we can build a static HTML report:
+```bash
+# build a static HTML report
+bgcflow build report
+```
+
+- To serve the static HTML report, do:
+```bash
+bgcflow serve --project <project name>
+```
+
+- We can also build a DuckDB database from the results:
+```bash
+bgcfow build database
+```
+
+- The database can be uploaded to Metabase for visualization. To start a Metabase instance, do:
+```bash
+bgcflow serve --metabase
+```
+- To upload and sync the database to Metabase, do:
+```bash
+bgcflow sync <project name>
+```
 
 - To find out all the rules that can be added in the configuration file, do:
 ```bash

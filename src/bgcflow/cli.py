@@ -403,7 +403,7 @@ def build(build_type, **kwargs):
 @main.command()
 def sync(project_name, **kwargs):
     """
-    Uploads and sync DuckDB database to Metabase.
+    Upload and sync DuckDB database to Metabase.
     """
     upload_and_sync_to_metabase(project_name, **kwargs)
 
