@@ -21,9 +21,6 @@ def generate_global_config(bgcflow_dir, global_config):
     Parameters:
         bgcflow_dir (str or pathlib.PosixPath): The directory where the BGCFlow configuration is located.
         global_config (str or pathlib.PosixPath): The path to the global configuration file to be generated.
-
-    Returns:
-        None
     """
     print(f"Generating config file from template at: {global_config}")
     template_config = bgcflow_dir / ".examples/_config_example.yaml"
@@ -59,7 +56,6 @@ def generate_global_config(bgcflow_dir, global_config):
 
     for project_type in ["projects", "bgc_projects"]:
         copy_project_example(project_type)
-    return
 
 
 def bgcflow_init(bgcflow_dir, global_config):
@@ -73,9 +69,6 @@ def bgcflow_init(bgcflow_dir, global_config):
     Parameters:
         bgcflow_dir (str or pathlib.PosixPath): The directory where the BGCFlow configuration is located.
         global_config (str or pathlib.PosixPath): The path to the global configuration file.
-
-    Returns:
-        None
     """
     # check if global config available
     if global_config.is_file():
@@ -107,8 +100,6 @@ def bgcflow_init(bgcflow_dir, global_config):
 
     print("\nDo a test run by: `bgcflow run -n`")
 
-    return
-
 
 def generate_project(
     bgcflow_dir,
@@ -137,9 +128,6 @@ def generate_project(
         prokka_db (str, optional): Path to a custom Prokka annotation file. Defaults to False.
         gtdb_tax (str, optional): Path to a custom GTDB taxonomy file. Defaults to False.
         description (str, optional): Description for the project. Defaults to False.
-
-    Returns:
-        None
     """
 
     # Ensure bgcflow_dir is a pathlib.PosixPath
@@ -248,10 +236,24 @@ def generate_project(
     # Update and save global config
     with open(bgcflow_dir / "config/config.yaml", "w") as file:
         yaml.dump(main_config, file, sort_keys=False)
-    return
 
 
 def projects_util(**kwargs):
+    """
+    Utility function for managing BGCflow projects.
+
+    Parameters:
+        **kwargs (dict): Keyword arguments for the function.
+
+    Keyword Arguments:
+        bgcflow_dir (str): Path to the BGCflow directory.
+        project (str): Name of the BGCflow project to generate.
+        use_project_pipeline (bool): Whether to use the project-specific pipeline rules.
+        prokka_db (str): Path to the Prokka database.
+        gtdb_tax (str): Path to the GTDB taxonomy file.
+        samples_csv (str): Path to the samples CSV file.
+    """
+
     # pep_version = "2.1.0"
     bgcflow_dir = Path(kwargs["bgcflow_dir"]).resolve()
     config_dir = bgcflow_dir / "config"
@@ -271,7 +273,6 @@ def projects_util(**kwargs):
         )
     else:
         bgcflow_init(bgcflow_dir, global_config)
-    return
 
 
 def copy_final_output(**kwargs):
@@ -279,18 +280,16 @@ def copy_final_output(**kwargs):
     Copy final project output files to a specified destination.
 
     This function facilitates the copying of processed project output files to a designated destination. It can
-    also preserve symbolic links during the copy process if specified. Excludes specific cache directories from
-    being copied.
+    also preserve symbolic links during the copy process if specified.
 
     Parameters:
-        **kwargs (dict): A dictionary containing the following keys:
-            - bgcflow_dir (str): The directory where the BGCFlow configuration is located.
-            - project (str): The name of the project whose output should be copied.
-            - copy_links (bool, optional): Flag to indicate whether to preserve symbolic links. Defaults to False.
-            - copy (str): The destination directory where the output should be copied.
+        **kwargs (dict): Keyword argument for the function.
 
-    Returns:
-        None
+    Keyword arguments:
+        bgcflow_dir (str): The directory where the BGCFlow configuration is located.
+        project (str): The name of the project whose output should be copied.
+        copy_links (bool, optional): Flag to indicate whether to preserve symbolic links. Defaults to False.
+        copy (str): The destination directory where the output should be copied.
     """
     bgcflow_dir = Path(kwargs["bgcflow_dir"]).resolve()
     project_output = bgcflow_dir / f"data/processed/{kwargs['project']}"
@@ -314,4 +313,3 @@ def copy_final_output(**kwargs):
             exclude_copy,
         ]
     )
-    return
