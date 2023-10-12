@@ -33,11 +33,11 @@ terminal:
 
 ```bash
 # create and activate new conda environment
-conda create -n bgcflow pip -y
+conda create -n bgcflow -c conda-forge python=3.11 pip openjdk -y
 conda activate bgcflow
 
 # install BGCFlow wrapper
-pip install git+https://github.com/NBChub/bgcflow_wrapper.git
+pip install bgcflow_wrapper
 ```
 
 ## Features
