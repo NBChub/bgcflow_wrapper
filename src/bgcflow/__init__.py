@@ -2,4 +2,4 @@
 
 __author__ = """Matin Nuhamunada"""
 __email__ = "matinnu@biosustain.dtu.dk"
-__version__ = "0.3.2"
+__version__ = "0.3.3"
