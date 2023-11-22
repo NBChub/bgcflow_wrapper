@@ -91,7 +91,15 @@ def snakemake_wrapper(**kwargs):
         "workflow/Metabase",
     ]:
         snakefile = bgcflow_dir / kwargs["workflow"]
-    elif kwargs["workflow"] in ["Snakefile", "BGC", "Report", "Database", "Metabase"]:
+    elif kwargs["workflow"] in [
+        "Snakefile",
+        "BGC",
+        "Report",
+        "Database",
+        "Metabase",
+        "lsabgc",
+        "ppanggolin",
+    ]:
         snakefile = bgcflow_dir / f'workflow/{kwargs["workflow"]}'
     else:
         snakefile = bgcflow_dir / kwargs["workflow"]
