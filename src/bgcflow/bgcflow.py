@@ -39,40 +39,44 @@ def snakemake_wrapper(**kwargs):
     if kwargs["until"] is not None:
         until = f"--until {kwargs['until']}"
 
-    # Run Panoptes if not yet run
-    port = int(kwargs["wms_monitor"].split(":")[-1])
+    if kwargs["monitor_off"]:
+        pass
+    else:
+        click.echo("Monitoring BGCFlow jobs with Panoptes...")
+        # Run Panoptes if not yet run
+        port = int(kwargs["wms_monitor"].split(":")[-1])
 
-    try:
-        item = requests.get(f"{kwargs['wms_monitor']}/api/service-info")
-        status = item.json()["status"]
-        assert status == "running"
-        click.echo(f"Panoptes already {status} on {kwargs['wms_monitor']}")
-    except requests.exceptions.RequestException:  # This is the correct syntax
-        click.echo(
-            f"Running Panoptes to monitor BGCFlow jobs at {kwargs['wms_monitor']}"
-        )
-        p = subprocess.Popen(
-            ["panoptes", "--port", str(port)], stderr=subprocess.DEVNULL
-        )
-        click.echo(f"Panoptes job id: {p.pid}")
-
-    # Connect to Panoptes
-    click.echo("Connecting to Panoptes...")
-    ctr = 1
-    for tries in range(10):
         try:
             item = requests.get(f"{kwargs['wms_monitor']}/api/service-info")
             status = item.json()["status"]
-            if status == "running":
-                click.echo(f"Panoptes status: {status}")
-                break
+            assert status == "running"
+            click.echo(f"Panoptes already {status} on {kwargs['wms_monitor']}")
         except requests.exceptions.RequestException:  # This is the correct syntax
-            click.echo(f"Retrying to connect: {ctr}x")
-            ctr = ctr + 1
-            time.sleep(1)
-            pass
-        else:
-            time.sleep(1)
+            click.echo(
+                f"Running Panoptes to monitor BGCFlow jobs at {kwargs['wms_monitor']}"
+            )
+            p = subprocess.Popen(
+                ["panoptes", "--port", str(port)], stderr=subprocess.DEVNULL
+            )
+            click.echo(f"Panoptes job id: {p.pid}")
+
+        # Connect to Panoptes
+        click.echo("Connecting to Panoptes...")
+        ctr = 1
+        for tries in range(10):
+            try:
+                item = requests.get(f"{kwargs['wms_monitor']}/api/service-info")
+                status = item.json()["status"]
+                if status == "running":
+                    click.echo(f"Panoptes status: {status}")
+                    break
+            except requests.exceptions.RequestException:  # This is the correct syntax
+                click.echo(f"Retrying to connect: {ctr}x")
+                ctr = ctr + 1
+                time.sleep(1)
+                pass
+            else:
+                time.sleep(1)
 
     # Check Snakefile
     valid_workflows = {
