@@ -1,5 +1,6 @@
 """Main module."""
 import json
+import multiprocessing
 import subprocess
 import sys
 import time
@@ -77,9 +78,11 @@ def snakemake_wrapper(**kwargs):
     valid_workflows = {
         "Snakefile": "Main BGCFlow snakefile for genome mining",
         "BGC": "Subworkflow for comparative analysis of BGCs",
-        "Report": "Build a report for a BGCFlow run",
-        "Database": "Build a database for a BGCFlow run",
-        "Metabase": "Run a metabase server",
+        "Report": "Build a static html report of a BGCFlow run",
+        "Database": "Build a DuckDB database for a BGCFlow run",
+        "Metabase": "Run a metabase server for visual exploration of the DuckDB database",
+        "lsabgc": "Run population genetic and evolutionary analysis with lsaBGC-Easy.py using BiG-SCAPE output",
+        "ppanggolin": "Build pangenome graph and detect region of genome plasticity with PPanGGOLiN",
     }
 
     bgcflow_dir = Path(kwargs["bgcflow_dir"])
@@ -89,6 +92,8 @@ def snakemake_wrapper(**kwargs):
         "workflow/Report",
         "workflow/Database",
         "workflow/Metabase",
+        "workflow/lsabgc",
+        "workflow/ppanggolin",
     ]:
         snakefile = bgcflow_dir / kwargs["workflow"]
     elif kwargs["workflow"] in [
@@ -111,14 +116,26 @@ def snakemake_wrapper(**kwargs):
     )
 
     # Run Snakemake
+    if kwargs["cores"] > multiprocessing.cpu_count():
+        click.echo(
+            f"\nWARNING: Number of cores inputted ({kwargs['cores']}) is higher than the number of available cores ({multiprocessing.cpu_count()})."
+        )
+        click.echo(
+            f"DEBUG: Setting number of cores to available cores: {multiprocessing.cpu_count()}\n"
+        )
+        kwargs["cores"] = multiprocessing.cpu_count()
+    else:
+        click.echo(
+            f"\nDEBUG: Using {kwargs['cores']} out of {multiprocessing.cpu_count()} available cores\n"
+        )
     snakemake_command = f"cd {kwargs['bgcflow_dir']} && snakemake --snakefile {snakefile} --use-conda --keep-going --rerun-incomplete --rerun-triggers mtime -c {kwargs['cores']} {dryrun} {touch} {until} {unlock} --wms-monitor {kwargs['wms_monitor']}"
-    click.echo(snakemake_command)
+    click.echo(f"Running Snakemake with command:\n{snakemake_command}")
     subprocess.call(snakemake_command, shell=True)
 
     # Kill Panoptes
     try:
         if not type(p) == str:
-            click.echo(f"Killing panoptes: PID {p.pid}")
+            click.echo(f"Stopping panoptes server: PID {p.pid}")
             p.kill()
     except UnboundLocalError as e:
         click.echo(e)
