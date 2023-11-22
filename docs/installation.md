@@ -2,7 +2,7 @@
 To install bgcflow_wrapper, run this command in your terminal:
 
 ``` console
-pip install git+https://github.com/NBChub/bgcflow_wrapper.git
+pip install bgcflow_wrapper
 ```
 
 This is the preferred method to install bgcflow_wrapper, as it will always install the most recent stable release.
