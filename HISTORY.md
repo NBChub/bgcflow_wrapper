@@ -1,4 +1,10 @@
 # History
+## 0.3.4 (2023-11-22)
+- Synchronize with BGCFlow version 0.7.9
+- **feat**: add CLI option for lsabgc and ppanggolin by @matinnuhamunada in [PR #37](https://github.com/NBChub/bgcflow_wrapper/pull/37)
+- **chore**: Auto detect available CPU
+- **feat**: give option to turn off panoptes
+- [Full Changelog](https://github.com/NBChub/bgcflow_wrapper/compare/v0.3.3...v0.3.4)
 
 ## 0.3.3 (2023-11-20)
 - **Fix**: Pin snakemake to v7.31.1 for compatibility with panoptes-ui job monitoring. [PR #35](https://github.com/NBChub/bgcflow_wrapper/pull/35)
