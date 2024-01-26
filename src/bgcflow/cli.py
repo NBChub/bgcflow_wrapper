@@ -93,6 +93,11 @@ def clone(**kwargs):
     help="Runs the pipeline until it reaches the specified rules or files.",
 )
 @click.option(
+    "--profile",
+    default=None,
+    help="Path to a directory containing snakemake profile.",
+)
+@click.option(
     "-t",
     "--touch",
     is_flag=True,

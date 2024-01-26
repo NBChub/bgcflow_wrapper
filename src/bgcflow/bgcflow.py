@@ -1,8 +1,6 @@
 """Main module."""
-import json
 import multiprocessing
 import subprocess
-import sys
 import time
 from pathlib import Path
 
@@ -29,15 +27,18 @@ def snakemake_wrapper(**kwargs):
     touch = ""
     unlock = ""
     until = ""
+    profile = ""
 
     if kwargs["dryrun"]:
         dryrun = "--dryrun"
     if kwargs["touch"]:
         touch = "--touch"
     if kwargs["unlock"]:
-        touch = "--unlock"
+        unlock = "--unlock"
     if kwargs["until"] is not None:
         until = f"--until {kwargs['until']}"
+    if kwargs["profile"] is not None:
+        profile = f"--profile {kwargs['profile']}"
 
     if kwargs["monitor_off"]:
         pass
@@ -132,7 +133,7 @@ def snakemake_wrapper(**kwargs):
         click.echo(
             f"\nDEBUG: Using {kwargs['cores']} out of {multiprocessing.cpu_count()} available cores\n"
         )
-    snakemake_command = f"cd {kwargs['bgcflow_dir']} && snakemake --snakefile {snakefile} --use-conda --keep-going --rerun-incomplete --rerun-triggers mtime -c {kwargs['cores']} {dryrun} {touch} {until} {unlock} --wms-monitor {kwargs['wms_monitor']}"
+    snakemake_command = f"cd {kwargs['bgcflow_dir']} && snakemake --snakefile {snakefile} --use-conda --keep-going --rerun-incomplete --rerun-triggers mtime -c {kwargs['cores']} {dryrun} {touch} {until} {unlock} {profile} --wms-monitor {kwargs['wms_monitor']}"
     click.echo(f"Running Snakemake with command:\n{snakemake_command}")
     subprocess.call(snakemake_command, shell=True)
 
