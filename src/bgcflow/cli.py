@@ -170,10 +170,7 @@ def init(**kwargs):
 
 
 @main.command()
-@click.argument(
-    "project",
-    help="The name of the project for which you want to view or copy results.",
-)
+@click.argument("project")
 @click.option(
     "--destination",
     help="Provide a destination path here if you want to copy the results. If not provided, the results will be displayed.",
