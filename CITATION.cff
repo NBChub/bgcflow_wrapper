@@ -17,7 +17,7 @@ authors:
   given-names: "Tilmann"
   orcid: "https://orcid.org/0000-0002-8260-5120"
 title: "bgcflow_wrapper"
-version: 0.2.4
+version: 0.4.0
 doi: "N/A"
 date-released: 2023-06-15
 url: "https://github.com/NBChub/bgcflow_wrapper"
@@ -39,11 +39,9 @@ preferred-citation:
   - family-names: "Weber"
     given-names: "Tilmann"
     orcid: "https://orcid.org/0000-0002-8260-5120"
-  doi: "10.1101/2023.06.14.545018"
-  journal: "bioRxiv"
-  publisher: "Cold Spring Harbor Laboratory"
+  doi: "10.1093/nar/gkae314"
+  journal: "Nucleic Acids Research"
+  publisher: "Oxford University Press"
   title: "BGCFlow: Systematic pangenome workflow for the analysis of biosynthetic gene clusters across large genomic datasets"
-  elocation-id: "2023.06.14.545018"
-  year: 2023
-  url: "https://www.biorxiv.org/content/early/2023/06/15/2023.06.14.545018"
-  eprint: "https://www.biorxiv.org/content/early/2023/06/15/2023.06.14.545018.full.pdf"
+  year: 2024
+  url: "https://doi.org/10.1093/nar/gkae314"
