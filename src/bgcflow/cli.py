@@ -182,9 +182,8 @@ def init(**kwargs):
 )
 @click.option(
     "--resolve-symlinks",
-    is_flag=True,
-    default=True,
-    help="By default, symlinks are resolved as actual files/folders when copying. Set this flag to False if you want to keep them as symlinks.",
+    default="True",
+    help="Resolve symlinks as actual files/folders when copying. Set this to False if you want to keep them as symlinks. (DEFAULT: True)",
 )
 def get_result(**kwargs):
     """
