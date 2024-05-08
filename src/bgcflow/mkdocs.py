@@ -19,29 +19,23 @@ class Dict2Class(object):
     """
     A class that converts a dictionary to an object with attributes.
 
-    Parameters:
-    -----------
-    my_dict : dict
-        The dictionary to convert to an object.
+    Args:
+        my_dict (dict): The dictionary to convert to an object.
 
     Attributes:
-    -----------
-    All keys in the dictionary are converted to attributes of the object.
+        All keys in the dictionary are converted to attributes of the object.
 
     Methods:
-    --------
-    print_references():
-        Returns a formatted string of the `references` attribute of the object.
+        print_references():
+            Returns a formatted string of the `references` attribute of the object.
     """
 
     def __init__(self, my_dict):
         """
         Initializes the object with attributes from the dictionary.
 
-        Parameters:
-        -----------
-        my_dict : dict
-            The dictionary to convert to an object.
+        Args:
+            my_dict (dict): The dictionary to convert to an object.
         """
         for key in my_dict:
             setattr(self, key, my_dict[key])
@@ -51,9 +45,7 @@ class Dict2Class(object):
         Returns a formatted string of the `references` attribute of the object.
 
         Returns:
-        --------
-        str:
-            A formatted string of the `references` attribute of the object.
+            str: A formatted string of the `references` attribute of the object.
         """
         text = ""
         for r in self.references:
@@ -65,15 +57,11 @@ def load_project_metadata(path_to_metadata):
     """
     Loads project metadata from a JSON file and returns it as an object.
 
-    Parameters:
-    -----------
-    path_to_metadata : str or Path
-        The path to the JSON file containing the project metadata.
+    Args:
+        path_to_metadata (str or Path): The path to the JSON file containing the project metadata.
 
     Returns:
-    --------
-    Dict2Class:
-        An object representing the project metadata.
+        Dict2Class: An object representing the project metadata.
     """
     with open(path_to_metadata, "r") as f:
         project_metadata = json.load(f)
@@ -87,18 +75,10 @@ def write_mkdocs_file(data_input, output_file, action):
     """
     Writes data to a file in either YAML or plain text format.
 
-    Parameters:
-    -----------
-    data_input : dict or str
-        The data to write to the file.
-    output_file : str or Path
-        The path to the file to write.
-    action : str
-        The action to perform. Either "yaml" to write the data in YAML format, or "write" to write the data as plain text.
-
-    Returns:
-    --------
-    None
+    Args:
+        data_input (dict or str): The data to write to the file.
+        output_file (str or Path): The path to the file to write.
+        action (str): The action to perform. Either "yaml" to write the data in YAML format, or "write" to write the data as plain text.
     """
     if output_file.exists():
         overwrite = input(
@@ -132,22 +112,12 @@ def generate_mkdocs_report(
     """
     Generates an MkDocs report for a BGCFlow project.
 
-    Parameters:
-    -----------
-    bgcflow_dir : str
-        The path to the BGCFlow project directory.
-    project_name : str
-        The name of the BGCFlow project.
-    port : int, optional
-        The port number to use for the MkDocs server, by default 8001.
-    fileserver : str, optional
-        The URL of the file server to use, by default "http://localhost:8002".
-    ipynb : bool, optional
-        Whether to use IPython notebooks for the reports, by default True.
-
-    Returns:
-    --------
-    None
+    Args:
+        bgcflow_dir (str): The path to the BGCFlow project directory.
+        project_name (str: The name of the BGCFlow project.
+        port (int, optional): The port number to use for the MkDocs server, by default 8001.
+        fileserver (str, optional): The URL of the file server to use, by default "http://localhost:8002".
+        ipynb (bool, optional): Whether to use IPython notebooks for the reports, by default True.
     """
     logging.info("Checking input folder..")
 
@@ -306,16 +276,9 @@ def signal_handler(signal, frame):
     """
     A signal handler function that prints a message and exits the program.
 
-    Parameters:
-    -----------
-    signal : int
-        The signal number.
-    frame : FrameType
-        The current stack frame.
-
-    Returns:
-    --------
-    None
+    Args:
+        signal (int): The signal number.
+        frame (FrameType): The current stack frame.
     """
     print("\nThank you for using BGCFlow Report!")
     # with open('bgcflow_wrapper.log', "r") as f:
