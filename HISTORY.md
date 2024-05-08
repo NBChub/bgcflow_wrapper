@@ -1,9 +1,16 @@
 # History
+## 0.3.5 (2024-06-01)
+- Snakemake fix and security update by @matinnuhamunada in https://github.com/NBChub/bgcflow_wrapper/pull/39
+- **Fix**: Pin pulp version to 2.7.0 to address snakemake dependency issue: https://github.com/snakemake/snakemake/issues/2606
+- **Feat**: add `--profile` parameters on `bgcflow` run to use snakemake profiles
+- **Chore(deps)**: bump pip from 22.3.1 to 23.3 by @dependabot in https://github.com/NBChub/bgcflow_wrapper/pull/40
+- [Full Changelog](https://github.com/NBChub/bgcflow_wrapper/compare/v0.3.4...v0.3.5)
+
 ## 0.3.4 (2023-11-22)
 - Synchronize with BGCFlow version 0.7.9
-- **feat**: add CLI option for lsabgc and ppanggolin by @matinnuhamunada in [PR #37](https://github.com/NBChub/bgcflow_wrapper/pull/37)
-- **chore**: Auto detect available CPU
-- **feat**: give option to turn off panoptes
+- **Feat**: add CLI option for lsabgc and ppanggolin by @matinnuhamunada in [PR #37](https://github.com/NBChub/bgcflow_wrapper/pull/37)
+- **Chore**: Auto detect available CPU
+- **Feat**: give option to turn off panoptes
 - [Full Changelog](https://github.com/NBChub/bgcflow_wrapper/compare/v0.3.3...v0.3.4)
 
 ## 0.3.3 (2023-11-20)
