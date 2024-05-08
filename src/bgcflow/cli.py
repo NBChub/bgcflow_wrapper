@@ -170,29 +170,47 @@ def init(**kwargs):
 
 
 @main.command()
-@click.argument("project")
-@click.option("--copy", help="Destination path to copy results.")
+@click.argument(
+    "project",
+    help="The name of the project for which you want to view or copy results.",
+)
+@click.option(
+    "--destination",
+    help="Provide a destination path here if you want to copy the results. If not provided, the results will be displayed.",
+)
 @click.option(
     "--bgcflow_dir",
     default=".",
     help="Location of BGCFlow directory. (DEFAULT: Current working directory)",
 )
-@click.option("--copy-links", is_flag=True, help="Resolve symlinks as file/folders.)")
+@click.option(
+    "--resolve-symlinks",
+    is_flag=True,
+    default=True,
+    help="By default, symlinks are resolved as actual files/folders when copying. Set this flag to False if you want to keep them as symlinks.",
+)
 def get_result(**kwargs):
     """
     View a tree of a project results or get a copy using Rsync.
 
     PROJECT: project name
     """
-    if kwargs["copy"] is None:
-        project_dir = (
-            Path(kwargs["bgcflow_dir"]) / f"data/processed/{kwargs['project']}"
-        )
+    project_dir = Path(kwargs["bgcflow_dir"]) / f"data/processed/{kwargs['project']}"
+
+    if not project_dir.exists():
+        print(f"The project directory {project_dir} does not exist.")
+        return
+
+    if kwargs["destination"] is None:
         print(f"Available items from {project_dir}:")
         [print(" -", item.name) for item in project_dir.glob("*")]
-        print("Use --copy <DESTINATION> for copying items to destination path")
+        print(
+            "Use --destination <DESTINATION> to copy these items to a destination path."
+        )
     else:
+        print(f"Copying items from {project_dir} to {kwargs['destination']}...")
         copy_final_output(**kwargs)
+        print("Copy completed.")
 
 
 @main.command()
