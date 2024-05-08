@@ -277,27 +277,31 @@ def copy_final_output(**kwargs):
     Keyword arguments:
         bgcflow_dir (str): The directory where the BGCFlow configuration is located.
         project (str): The name of the project whose output should be copied.
-        copy_links (bool, optional): Flag to indicate whether to preserve symbolic links. Defaults to False.
-        copy (str): The destination directory where the output should be copied.
+        resolve_symlinks (str, optional): Indicate whether to preserve symbolic links. Defaults to False.
+        destination (str): The destination directory where the output should be copied.
     """
     bgcflow_dir = Path(kwargs["bgcflow_dir"]).resolve()
     project_output = bgcflow_dir / f"data/processed/{kwargs['project']}"
     assert (
         project_output.is_dir()
     ), f"ERROR: Cannot find project [{kwargs['project']}] results. Run `bgcflow init` to find available projects."
-    if "copy_links" in kwargs.keys():
-        if kwargs["copy_links"]:
-            copy_links = "-L"
+    if "resolve-symlinks" in kwargs.keys():
+        assert kwargs["resolve-symlinks"] in [
+            "True",
+            "False",
+        ], f'Invalid argument {kwargs["resolve-symlinks"]} in --resolve-symlinks. Choose between "True" or "False"'
+        if kwargs["resolve-symlinks"] == "True":
+            resolve_symlinks = "-L"
     else:
-        copy_links = ""
+        resolve_symlinks = ""
     exclude_copy = f"{str(project_output.stem)}/bigscape/*/cache"
     subprocess.call(
         [
             "rsync",
             "-avPhr",
-            copy_links,
+            resolve_symlinks,
             str(project_output),
-            kwargs["copy"],
+            kwargs["destination"],
             "--exclude",
             exclude_copy,
         ]
