@@ -18,5 +18,8 @@ jobs:
     - name: Install dependencies
       run: pip install .
 
+    - name: Install additional dependencies
+      run: pip install toml
+
     - name: Run pytest
       run: pytest

@@ -21,11 +21,11 @@ jobs:
     # The type of runner that the job will run on
     strategy:
       matrix:
-        python-versions: ['3.8', '3.9', '3.10', '3.11']
+        python-versions: ['3.11']
         # github action doesn't goes well with windows due to docker support
         # github action doesn't goes well with macos due to `no docker command`
         #os: [ubuntu-20.04, windows-latest, macos-latest]
-        os: [ubuntu-20.04]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     # map step outputs to job outputs so they can be share among jobs
     outputs:
@@ -72,7 +72,7 @@ jobs:
       - name: test with tox
         run: tox
 
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@v4
         with:
           version: "v0.1.15"
           fail_ci_if_error: false
@@ -86,7 +86,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
