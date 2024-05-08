@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "bgcflow_wrapper"
-version = "0.3.5"
+version = "0.4.0"
 documentation = "https://nbchub.github.io/bgcflow_wrapper"
 repository = "https://github.com/NBChub/bgcflow_wrapper"
 description = "A snakemake wrapper and utility tools command line interface for BGCFlow."
@@ -14,9 +14,6 @@ classifiers=[
     'License :: OSI Approved :: MIT License',
     'Natural Language :: English',
     'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.8',
-    'Programming Language :: Python :: 3.9',
-    'Programming Language :: Python :: 3.10',
     'Programming Language :: Python :: 3.11',
 ]
 packages = [
@@ -25,7 +22,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<4.0"
+python = ">=3.11,<4.0"
 
 black  = { version = "^22.3.0", optional = true}
 isort  = { version = "5.10.1", optional = true}
@@ -51,7 +48,7 @@ click = "^8.1.3"
 snakedeploy = "^0.8.2"
 peppy = "^0.35.4"
 panoptes-ui = "^0.2.0"
-snakemake = "7.31.1"
+snakemake = "8.11.3"
 mkdocs-jupyter = "^0.24.2"
 mkdocs-macros-plugin = "^1.0.4"
 setuptools = "^65.5.1"
@@ -70,7 +67,8 @@ test = [
     "isort",
     "flake8",
     "flake8-docstrings",
-    "pytest-cov"
+    "pytest-cov",
+    "toml"
     ]
 
 dev = ["tox", "pre-commit", "virtualenv", "pip", "twine", "toml"]
