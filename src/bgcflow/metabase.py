@@ -1,11 +1,9 @@
 import json
 import subprocess
-import sys
 from pathlib import Path
 
 import click
 import requests
-from dbtmetabase.models.interface import DbtInterface, MetabaseInterface
 
 
 def upload_and_sync_to_metabase(
@@ -220,18 +218,18 @@ def sync_dbt_models_to_metabase(
     """
     Synchronizes dbt models to Metabase using the dbt-metabase package.
 
-    Parameters:
-    dbt_dir (str): The path to the dbt project directory.
-    dbt_database (str): The name of the dbt database to use.
-    metabase_host (str): The URL of the Metabase server.
-    metabase_user (str): The username of the Metabase account to use.
-    metabase_password (str): The password of the Metabase account to use.
-    metabase_database (str): The name of the Metabase database to use.
-    dbt_schema (str, optional): The name of the dbt schema to use. Defaults to "main".
-    metabase_http (bool, optional): Whether to use HTTP instead of HTTPS for the Metabase connection. Defaults to False.
+    Args:
+        dbt_dir (str): The path to the dbt project directory.
+        dbt_database (str): The name of the dbt database to use.
+        metabase_host (str): The URL of the Metabase server.
+        metabase_user (str): The username of the Metabase account to use.
+        metabase_password (str): The password of the Metabase account to use.
+        metabase_database (str): The name of the Metabase database to use.
+        dbt_schema (str, optional): The name of the dbt schema to use. Defaults to "main".
+        metabase_http (bool, optional): Whether to use HTTP instead of HTTPS for the Metabase connection. Defaults to False.
 
     Returns:
-    str: The output of the dbt-metabase command as a string.
+        str: The output of the dbt-metabase command as a string.
     """
     click.echo(" - Synchronizing dbt models schema to Metabase...")
     if metabase_http:

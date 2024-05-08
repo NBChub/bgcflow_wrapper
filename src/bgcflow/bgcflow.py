@@ -15,11 +15,11 @@ def snakemake_wrapper(**kwargs):
     """
     Wrapper function for running Snakemake with BGCFlow.
 
-    Parameters:
-    **kwargs (dict): Keyword arguments for Snakemake and BGCFlow.
+    Args:
+        **kwargs (dict): Keyword arguments for Snakemake and BGCFlow.
 
     Returns:
-    None
+        None
     """
     p = "Empty process catcher"
 
@@ -151,11 +151,11 @@ def deployer(**kwargs):
     """
     Deploy the BGCFlow repository to a specified destination using Snakedeploy.
 
-    Parameters:
-    **kwargs (dict): Keyword arguments for the deployment.
+    Args:
+        **kwargs (dict): Keyword arguments for the deployment.
 
     Returns:
-    None
+        None
     """
     dplyr(
         "https://github.com/NBChub/bgcflow.git",
@@ -171,11 +171,11 @@ def cloner(**kwargs):
     """
     Clone the BGCFlow repository to a specified destination.
 
-    Parameters:
-    **kwargs (dict): Keyword arguments for the cloning.
+    Args:
+        **kwargs (dict): Keyword arguments for the cloning.
 
     Returns:
-    None
+        None
     """
     destination_dir = Path(kwargs["destination"])
     click.echo(f"Cloning BGCFlow to {destination_dir}...")
@@ -197,11 +197,11 @@ def get_all_rules(**kwargs):
     """
     Print information about available rules in the BGCFlow repository.
 
-    Parameters:
-    **kwargs (dict): Keyword arguments for the function.
+    Args:
+        **kwargs (dict): Keyword arguments for the function.
 
     Returns:
-    None
+        None
     """
     path = Path(kwargs["bgcflow_dir"])
     rule_file = path / "workflow/rules.yaml"

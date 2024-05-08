@@ -1,8 +1,7 @@
-import json
 import logging
 import shutil
 import subprocess
-from pathlib import Path, PosixPath
+from pathlib import Path
 
 import pandas as pd
 import peppy
@@ -18,7 +17,7 @@ def generate_global_config(bgcflow_dir, global_config):
 
     Copies the template configuration file to the specified global configuration path.
 
-    Parameters:
+    Args:
         bgcflow_dir (str or pathlib.PosixPath): The directory where the BGCFlow configuration is located.
         global_config (str or pathlib.PosixPath): The path to the global configuration file to be generated.
     """
@@ -66,7 +65,7 @@ def bgcflow_init(bgcflow_dir, global_config):
     If the global configuration file exists, it lists the available projects.
     If not, generates a global configuration file from the template and provides instructions for a test run.
 
-    Parameters:
+    Args:
         bgcflow_dir (str or pathlib.PosixPath): The directory where the BGCFlow configuration is located.
         global_config (str or pathlib.PosixPath): The path to the global configuration file.
     """
@@ -119,7 +118,7 @@ def generate_project(
     the project, such as its name, version, description, sample data, custom annotations,
     and more.
 
-    Parameters:
+    Args:
         bgcflow_dir (str or pathlib.PosixPath): The directory where the BGCFlow configuration is located.
         project_name (str): The name of the project.
         pep_version (str, optional): The version of the PEP specification. Defaults to "2.1.0".
@@ -160,17 +159,7 @@ def generate_project(
     if isinstance(samples_csv, pd.core.frame.DataFrame):
         print("Generating samples file from Pandas DataFrame")
         assert samples_csv.index.name == "genome_id"
-        assert (
-            samples_csv.columns
-            == [
-                "source",
-                "organism",
-                "genus",
-                "species",
-                "strain",
-                "closest_placement_reference",
-            ]
-        ).all
+        assert (samples_csv.columns == ["source", "organism", "genus", "species", "strain", "closest_placement_reference"]).all
         samples_csv.to_csv(project_dir / "samples.csv")
     elif isinstance(samples_csv, str):
         print(f"Copying samples file from {samples_csv}")
@@ -242,7 +231,7 @@ def projects_util(**kwargs):
     """
     Utility function for managing BGCflow projects.
 
-    Parameters:
+    Args:
         **kwargs (dict): Keyword arguments for the function.
 
     Keyword Arguments:
@@ -282,7 +271,7 @@ def copy_final_output(**kwargs):
     This function facilitates the copying of processed project output files to a designated destination. It can
     also preserve symbolic links during the copy process if specified.
 
-    Parameters:
+    Args:
         **kwargs (dict): Keyword argument for the function.
 
     Keyword arguments:
