@@ -173,7 +173,8 @@ def init(**kwargs):
 @click.argument("project")
 @click.option(
     "--destination",
-    help="Provide a destination path here if you want to copy the results. If not provided, the results will be displayed.",
+    default="results",
+    help="Provide a destination path here to copy the results. (DEFAULT: results)",
 )
 @click.option(
     "--bgcflow_dir",

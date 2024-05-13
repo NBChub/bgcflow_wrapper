@@ -7,8 +7,9 @@ import pandas as pd
 import peppy
 import yaml
 
-# Set the logging level to INFO to suppress debug messages
-logging.basicConfig(level=logging.INFO)
+log_format = "%(levelname)-8s %(asctime)s   %(message)s"
+date_format = "%d/%m %H:%M:%S"
+logging.basicConfig(format=log_format, datefmt=date_format, level=logging.DEBUG)
 
 
 def generate_global_config(bgcflow_dir, global_config):
@@ -21,7 +22,7 @@ def generate_global_config(bgcflow_dir, global_config):
         bgcflow_dir (str or pathlib.PosixPath): The directory where the BGCFlow configuration is located.
         global_config (str or pathlib.PosixPath): The path to the global configuration file to be generated.
     """
-    print(f"Generating config file from template at: {global_config}")
+    logging.info(f"Generating config file from template at: {global_config}")
     template_config = bgcflow_dir / ".examples/_config_example.yaml"
     assert (
         template_config.is_file()
@@ -48,7 +49,7 @@ def generate_global_config(bgcflow_dir, global_config):
             )
             target_dir = bgcflow_dir / "config" / example_project_dir.name
             if str(example_project).startswith(".examples"):
-                print(
+                logging.warning(
                     f"\n - WARNING: You are using BGCFlow version <= 0.7.1. In the global config file (`{global_config}`), please change the location of your `{example_project}` to `config/{example_project.parent.name}/{example_project.name}`."
                 )
             shutil.copytree(example_project_dir, target_dir)
@@ -72,7 +73,7 @@ def bgcflow_init(bgcflow_dir, global_config):
     # check if global config available
     if global_config.is_file():
         # grab available projects
-        print(f"Found config file at: {global_config}")
+        logging.debug(f"Found config file at: {global_config}")
         with open(global_config, "r") as file:
             config_yaml = yaml.safe_load(file)
             project_names = [p for p in config_yaml["projects"]]
@@ -157,19 +158,29 @@ def generate_project(
 
     # Handle samples_csv input
     if isinstance(samples_csv, pd.core.frame.DataFrame):
-        print("Generating samples file from Pandas DataFrame")
+        logging.debug("Generating samples file from Pandas DataFrame")
         assert samples_csv.index.name == "genome_id"
-        assert (samples_csv.columns == ["source", "organism", "genus", "species", "strain", "closest_placement_reference"]).all
+        assert (
+            samples_csv.columns
+            == [
+                "source",
+                "organism",
+                "genus",
+                "species",
+                "strain",
+                "closest_placement_reference",
+            ]
+        ).all
         samples_csv.to_csv(project_dir / "samples.csv")
     elif isinstance(samples_csv, str):
-        print(f"Copying samples file from {samples_csv}")
+        logging.debug(f"Copying samples file from {samples_csv}")
         samples_csv = Path(samples_csv)
         assert samples_csv.is_file()
         shutil.copy(samples_csv, project_dir / "samples.csv")
 
     # Handle prokka_db input
     if isinstance(prokka_db, str):
-        print(f"Copying custom annotation file from {prokka_db}")
+        logging.debug(f"Copying custom annotation file from {prokka_db}")
         prokka_db = Path(prokka_db)
         assert prokka_db.is_file()
         shutil.copy(prokka_db, project_dir / "prokka-db.csv")
@@ -177,7 +188,7 @@ def generate_project(
 
     # Handle gtdb_tax input
     if isinstance(gtdb_tax, str):
-        print(f"Copying custom taxonomy from {gtdb_tax}")
+        logging.debug(f"Copying custom taxonomy from {gtdb_tax}")
         gtdb_tax = Path(gtdb_tax)
         assert gtdb_tax.is_file()
         shutil.copy(gtdb_tax, project_dir / "gtdbtk.bac120.summary.tsv")
@@ -185,11 +196,11 @@ def generate_project(
 
     # Update template_dict with project description
     if isinstance(description, str):
-        print("Writing project description...")
+        logging.debug("Writing project description...")
         template_dict["description"] = description
 
     # Generate project configuration file
-    print(f"Project config file generated in: {project_dir}")
+    logging.info(f"Project config file generated in: {project_dir}")
     with open(project_dir / "project_config.yaml", "w") as file:
         yaml.dump(template_dict, file, sort_keys=False)
 
@@ -199,7 +210,7 @@ def generate_project(
 
     # Update global config.yaml with project information
     with open(bgcflow_dir / "config/config.yaml", "r") as file:
-        print("Updating global config.yaml")
+        logging.debug("Updating global config.yaml")
         main_config = yaml.safe_load(file)
 
         # Rename 'pep' to 'name' for consistency
@@ -285,24 +296,24 @@ def copy_final_output(**kwargs):
     assert (
         project_output.is_dir()
     ), f"ERROR: Cannot find project [{kwargs['project']}] results. Run `bgcflow init` to find available projects."
-    if "resolve-symlinks" in kwargs.keys():
-        assert kwargs["resolve-symlinks"] in [
+    if "resolve_symlinks" in kwargs.keys():
+        assert kwargs["resolve_symlinks"] in [
             "True",
             "False",
-        ], f'Invalid argument {kwargs["resolve-symlinks"]} in --resolve-symlinks. Choose between "True" or "False"'
-        if kwargs["resolve-symlinks"] == "True":
+        ], f'Invalid argument {kwargs["resolve_symlinks"]} in --resolve-symlinks. Choose between "True" or "False"'
+        if kwargs["resolve_symlinks"] == "True":
             resolve_symlinks = "-L"
     else:
         resolve_symlinks = ""
     exclude_copy = f"{str(project_output.stem)}/bigscape/*/cache"
-    subprocess.call(
-        [
-            "rsync",
-            "-avPhr",
-            resolve_symlinks,
-            str(project_output),
-            kwargs["destination"],
-            "--exclude",
-            exclude_copy,
-        ]
-    )
+    command = [
+        "rsync",
+        "-avPhr",
+        resolve_symlinks,
+        "--exclude",
+        exclude_copy,
+        str(project_output),
+        kwargs["destination"],
+    ]
+    logging.debug(f'Running command: {" ".join(command)}')
+    subprocess.call(command)
