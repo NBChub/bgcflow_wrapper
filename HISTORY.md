@@ -1,4 +1,10 @@
 # History
+## 0.4.0 (2024-06-20)
+- Upgrade Snakemake to v8.14.0
+- **Fix**: Improve `get-result` command to be more intuitive
+- **Docs**: Update citation
+- [Full Changelog](https://github.com/NBChub/bgcflow_wrapper/compare/v0.3.5...v0.4.0)
+
 ## 0.3.5 (2024-06-01)
 - Snakemake fix and security update by @matinnuhamunada in https://github.com/NBChub/bgcflow_wrapper/pull/39
 - **Fix**: Pin pulp version to 2.7.0 to address snakemake dependency issue: https://github.com/snakemake/snakemake/issues/2606
