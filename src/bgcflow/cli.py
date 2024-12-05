@@ -103,6 +103,13 @@ def clone(**kwargs):
     is_flag=True,
     help="Touch output files (mark them up to date without really changing them).",
 )
+@click.option(
+    "--antismash_mode",
+    type=click.Choice(["bacteria", "fungi"]),
+    default="bacteria",
+    help="Which antiSMASH mode to run. Available parameters are 'bacteria' or 'fungi'.",
+    show_default=True,
+)
 def run(**kwargs):
     """
     A snakemake CLI wrapper to run BGCFlow. Automatically run panoptes.

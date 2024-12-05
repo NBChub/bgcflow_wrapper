@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "bgcflow_wrapper"
-version = "0.4.0"
+version = "0.5.0"
 documentation = "https://nbchub.github.io/bgcflow_wrapper"
 repository = "https://github.com/NBChub/bgcflow_wrapper"
 description = "A snakemake wrapper and utility tools command line interface for BGCFlow."
@@ -48,7 +48,7 @@ click = "^8.1.3"
 snakedeploy = "^0.8.2"
 peppy = "^0.35.4"
 panoptes-ui = "^0.2.0"
-snakemake = "8.14.0"
+snakemake = "8.25.5"
 mkdocs-jupyter = "^0.24.2"
 mkdocs-macros-plugin = "^1.0.4"
 setuptools = "^65.5.1"

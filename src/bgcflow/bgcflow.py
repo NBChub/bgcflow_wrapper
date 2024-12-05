@@ -1,5 +1,6 @@
 """Main module."""
 import multiprocessing
+import os
 import subprocess
 import time
 from pathlib import Path
@@ -28,6 +29,8 @@ def snakemake_wrapper(**kwargs):
     unlock = ""
     until = ""
     profile = ""
+    antismash_mode = kwargs["antismash_mode"]
+    os.environ["BGCFLOW_ANTISMASH_MODE"] = antismash_mode
 
     if kwargs["dryrun"]:
         dryrun = "--dryrun"
