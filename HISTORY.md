@@ -1,4 +1,10 @@
 # History
+## 0.4.0 (2024-12-05)
+- Upgrade Snakemake to v8.25.5
+- **Feat**: Add `bgcflow run --antismash_mode` to enable use `fungi` version using BGCFlow environment variables
+- **Fix**: Security updates
+- [Full Changelog](https://github.com/NBChub/bgcflow_wrapper/compare/v0.4.0...v0.5.0)
+
 ## 0.4.0 (2024-06-20)
 - Upgrade Snakemake to v8.14.0
 - **Fix**: Improve `get-result` command to be more intuitive
