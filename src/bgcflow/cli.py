@@ -67,10 +67,10 @@ def clone(**kwargs):
     help="Select which snakefile to run. Available subworkflows: {BGC | Database | Report | Metabase | lsagbc | ppanggolin}. (DEFAULT: workflow/Snakefile)",
 )
 @click.option(
-    "--monitor-off",
+    "--monitor-on",
     default=False,
     is_flag=True,
-    help="Turn off Panoptes monitoring workflow. (DEFAULT: False)",
+    help="Turn on Panoptes monitoring workflow. (DEFAULT: False)",
 )
 @click.option(
     "--wms-monitor",

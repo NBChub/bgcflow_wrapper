@@ -43,7 +43,7 @@ def snakemake_wrapper(**kwargs):
     if kwargs["profile"] is not None:
         profile = f"--profile {kwargs['profile']}"
 
-    if kwargs["monitor_off"]:
+    if not kwargs["monitor_on"]:
         pass
     else:
         click.echo("Monitoring BGCFlow jobs with Panoptes...")
@@ -136,7 +136,13 @@ def snakemake_wrapper(**kwargs):
         click.echo(
             f"\nDEBUG: Using {kwargs['cores']} out of {multiprocessing.cpu_count()} available cores\n"
         )
-    snakemake_command = f"cd {kwargs['bgcflow_dir']} && snakemake --snakefile {snakefile} --use-conda --keep-going --rerun-incomplete --rerun-triggers mtime -c {kwargs['cores']} {dryrun} {touch} {until} {unlock} {profile} --wms-monitor {kwargs['wms_monitor']}"
+
+    # monitor
+    if not kwargs["monitor_on"]:
+        params_monitor = ""
+    else:
+        params_monitor = f"--wms-monitor {kwargs['wms_monitor']}"
+    snakemake_command = f"cd {kwargs['bgcflow_dir']} && snakemake --snakefile {snakefile} --use-conda --keep-going --rerun-incomplete --rerun-triggers mtime -c {kwargs['cores']} {dryrun} {touch} {until} {unlock} {profile} {params_monitor}"
     click.echo(f"Running Snakemake with command:\n{snakemake_command}")
     subprocess.call(snakemake_command, shell=True)
 
