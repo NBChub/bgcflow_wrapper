@@ -9,7 +9,6 @@ import click
 import requests
 import yaml
 from git import GitCommandError, Repo
-from snakedeploy.deploy import deploy as dplyr
 
 
 def snakemake_wrapper(**kwargs):
@@ -153,26 +152,6 @@ def snakemake_wrapper(**kwargs):
             p.kill()
     except UnboundLocalError as e:
         click.echo(e)
-    return
-
-
-def deployer(**kwargs):
-    """
-    Deploy the BGCFlow repository to a specified destination using Snakedeploy.
-
-    Args:
-        **kwargs (dict): Keyword arguments for the deployment.
-
-    Returns:
-        None
-    """
-    dplyr(
-        "https://github.com/NBChub/bgcflow.git",
-        branch=kwargs["branch"],
-        name="bgcflow",
-        dest_path=Path(kwargs["destination"]),
-        tag=kwargs["tag"],
-    )
     return
 
 

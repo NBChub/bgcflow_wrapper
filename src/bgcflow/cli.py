@@ -7,7 +7,7 @@ import click
 import yaml
 
 import bgcflow
-from bgcflow.bgcflow import cloner, deployer, get_all_rules, snakemake_wrapper
+from bgcflow.bgcflow import cloner, get_all_rules, snakemake_wrapper
 from bgcflow.metabase import upload_and_sync_to_metabase
 from bgcflow.mkdocs import generate_mkdocs_report
 from bgcflow.projects_util import copy_final_output, projects_util
@@ -22,18 +22,6 @@ def main():
     A snakemake wrapper and utility tools for BGCFlow (https://github.com/NBChub/bgcflow)
     """
     pass
-
-
-@main.command()
-@click.argument("destination")
-@click.option("--branch", default="main", help="BGCFlow branch/release to use")
-def deploy(**kwargs):
-    """
-    [EXPERIMENTAL] Deploy BGCFlow locally using snakedeploy.
-
-    DESTINATION: path to deploy BGCFlow
-    """
-    deployer(**kwargs)
 
 
 @main.command()
