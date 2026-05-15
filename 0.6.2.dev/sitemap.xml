@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://NBChub.github.io/bgcflow_wrapper/0.6.2.dev/</loc>
+         <lastmod>2026-05-15</lastmod>
+    </url>
+    <url>
+         <loc>https://NBChub.github.io/bgcflow_wrapper/0.6.2.dev/api/</loc>
+         <lastmod>2026-05-15</lastmod>
+    </url>
+    <url>
+         <loc>https://NBChub.github.io/bgcflow_wrapper/0.6.2.dev/authors/</loc>
+         <lastmod>2026-05-15</lastmod>
+    </url>
+    <url>
+         <loc>https://NBChub.github.io/bgcflow_wrapper/0.6.2.dev/contributing/</loc>
+         <lastmod>2026-05-15</lastmod>
+    </url>
+    <url>
+         <loc>https://NBChub.github.io/bgcflow_wrapper/0.6.2.dev/history/</loc>
+         <lastmod>2026-05-15</lastmod>
+    </url>
+    <url>
+         <loc>https://NBChub.github.io/bgcflow_wrapper/0.6.2.dev/installation/</loc>
+         <lastmod>2026-05-15</lastmod>
+    </url>
+    <url>
+         <loc>https://NBChub.github.io/bgcflow_wrapper/0.6.2.dev/tutorial/</loc>
+         <lastmod>2026-05-15</lastmod>
+    </url>
+    <url>
+         <loc>https://NBChub.github.io/bgcflow_wrapper/0.6.2.dev/usage/</loc>
+         <lastmod>2026-05-15</lastmod>
+    </url>
+</urlset>
